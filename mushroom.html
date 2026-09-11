@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -23,9 +24,14 @@
             --danger: #e74c3c;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        html, body {
+        html,
+        body {
             height: 100vh;
             height: 100dvh;
             overflow: hidden;
@@ -71,27 +77,39 @@
             border-bottom: 2px solid var(--card-border);
             z-index: 10;
         }
+
         .header-top {
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 8px;
         }
+
         .mushroom-count-section {
             display: flex;
             align-items: center;
             gap: 8px;
             flex-shrink: 0;
         }
+
         .mushroom-icon-big {
             font-size: 28px;
             filter: drop-shadow(0 0 8px rgba(255, 107, 107, 0.6));
             animation: bounce-mushroom 2s ease-in-out infinite;
         }
+
         @keyframes bounce-mushroom {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-4px); }
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-4px);
+            }
         }
+
         .mushroom-count {
             font-size: 21px;
             font-weight: bold;
@@ -100,6 +118,7 @@
             letter-spacing: 0.5px;
             line-height: 1.1;
         }
+
         .count-label {
             font-size: 9px;
             color: var(--text-dim);
@@ -113,18 +132,27 @@
             justify-content: center;
             flex-wrap: wrap;
         }
+
         .rare-mini {
             display: flex;
             align-items: center;
             gap: 3px;
-            background: rgba(0,0,0,0.3);
+            background: rgba(0, 0, 0, 0.3);
             border-radius: 20px;
             padding: 2px 7px;
             font-size: 11px;
             font-weight: bold;
         }
-        .rare-mini.silver { color: var(--silver); border: 1px solid rgba(192,192,192,0.4); }
-        .rare-mini.gold { color: var(--gold); border: 1px solid rgba(255,215,0,0.4); }
+
+        .rare-mini.silver {
+            color: var(--silver);
+            border: 1px solid rgba(192, 192, 192, 0.4);
+        }
+
+        .rare-mini.gold {
+            color: var(--gold);
+            border: 1px solid rgba(255, 215, 0, 0.4);
+        }
 
         .per-second-display {
             font-size: 10px;
@@ -133,6 +161,7 @@
             line-height: 1.3;
             flex-shrink: 0;
         }
+
         .per-second-display span {
             font-weight: bold;
             font-size: 13px;
@@ -145,8 +174,9 @@
             font-size: 10px;
             color: var(--text-dim);
             padding-top: 5px;
-            border-top: 1px solid rgba(255,255,255,0.06);
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
         }
+
         .header-bottom span {
             display: inline-flex;
             align-items: center;
@@ -155,6 +185,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
         .header-bottom b {
             color: var(--blue-accent);
             font-size: 11px;
@@ -170,111 +201,411 @@
             cursor: pointer;
             z-index: 1;
         }
+
         .scene::before {
             content: '';
             position: absolute;
-            bottom: 0; left: 0; right: 0; height: 75px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 75px;
             background: radial-gradient(ellipse at 10% 100%, #4a9e5a 0%, transparent 40%), radial-gradient(ellipse at 50% 100%, #3d8a4d 0%, transparent 45%), radial-gradient(ellipse at 90% 100%, #4a9e5a 0%, transparent 40%);
             z-index: 2;
             pointer-events: none;
         }
+
         .grass-tuft {
-            position: absolute; bottom: 55px; font-size: 22px; z-index: 3; pointer-events: none; animation: sway 3s ease-in-out infinite;
+            position: absolute;
+            bottom: 55px;
+            font-size: 22px;
+            z-index: 3;
+            pointer-events: none;
+            animation: sway 3s ease-in-out infinite;
         }
-        .grass-tuft:nth-child(1) { left: 8%; }
-        .grass-tuft:nth-child(2) { left: 22%; animation-delay: 0.5s; bottom: 48px; font-size: 26px; }
-        .grass-tuft:nth-child(3) { right: 15%; animation-delay: 1s; bottom: 52px; font-size: 20px; }
-        .grass-tuft:nth-child(4) { right: 32%; animation-delay: 1.6s; font-size: 18px; bottom: 50px; }
+
+        .grass-tuft:nth-child(1) {
+            left: 8%;
+        }
+
+        .grass-tuft:nth-child(2) {
+            left: 22%;
+            animation-delay: 0.5s;
+            bottom: 48px;
+            font-size: 26px;
+        }
+
+        .grass-tuft:nth-child(3) {
+            right: 15%;
+            animation-delay: 1s;
+            bottom: 52px;
+            font-size: 20px;
+        }
+
+        .grass-tuft:nth-child(4) {
+            right: 32%;
+            animation-delay: 1.6s;
+            font-size: 18px;
+            bottom: 50px;
+        }
+
         @keyframes sway {
-            0%, 100% { transform: rotate(-3deg); }
-            50% { transform: rotate(3deg); }
+
+            0%,
+            100% {
+                transform: rotate(-3deg);
+            }
+
+            50% {
+                transform: rotate(3deg);
+            }
         }
+
         .scene-mushroom {
-            position: absolute; z-index: 3; pointer-events: none; font-size: 16px; animation: mushroom-idle 2s ease-in-out infinite;
+            position: absolute;
+            z-index: 3;
+            pointer-events: none;
+            font-size: 16px;
+            animation: mushroom-idle 2s ease-in-out infinite;
         }
-        .scene-mushroom:nth-of-type(1) { left: 12%; bottom: 62px; }
-        .scene-mushroom:nth-of-type(2) { left: 38%; bottom: 56px; font-size: 14px; animation-delay: 0.4s; }
-        .scene-mushroom:nth-of-type(3) { right: 10%; bottom: 58px; animation-delay: 0.9s; font-size: 15px; }
-        .scene-mushroom:nth-of-type(4) { right: 38%; bottom: 60px; font-size: 12px; animation-delay: 1.3s; }
+
+        .scene-mushroom:nth-of-type(1) {
+            left: 12%;
+            bottom: 62px;
+        }
+
+        .scene-mushroom:nth-of-type(2) {
+            left: 38%;
+            bottom: 56px;
+            font-size: 14px;
+            animation-delay: 0.4s;
+        }
+
+        .scene-mushroom:nth-of-type(3) {
+            right: 10%;
+            bottom: 58px;
+            animation-delay: 0.9s;
+            font-size: 15px;
+        }
+
+        .scene-mushroom:nth-of-type(4) {
+            right: 38%;
+            bottom: 60px;
+            font-size: 12px;
+            animation-delay: 1.3s;
+        }
+
         @keyframes mushroom-idle {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-3px) scale(1.05); }
+
+            0%,
+            100% {
+                transform: translateY(0) scale(1);
+            }
+
+            50% {
+                transform: translateY(-3px) scale(1.05);
+            }
         }
 
         .character {
-            position: absolute; bottom: 52px; left: 50%; transform: translateX(-50%); z-index: 5; pointer-events: none;
+            position: absolute;
+            bottom: 52px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+            pointer-events: none;
         }
-        .character-body { display: flex; flex-direction: column; align-items: center; position: relative; }
-        .character-head {
-            width: 34px; height: 34px; background: #ffdbb5; border-radius: 50%; position: relative; z-index: 2; box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }
-        .character-head::after {
-            content: ''; position: absolute; top: -8px; left: 50%; transform: translateX(-50%); width: 38px; height: 16px; background: #8B4513; border-radius: 50% 50% 0 0; box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-        .character-head::before {
-            content: ''; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 42px; height: 10px; background: #a0522d; border-radius: 50% 50% 0 0;
-        }
-        .character-face { position: absolute; top: 11px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; }
-        .character-face span { width: 3px; height: 3px; background: #333; border-radius: 50%; }
-        .character-smile { position: absolute; top: 17px; left: 50%; transform: translateX(-50%); width: 8px; height: 4px; border-bottom: 2px solid #d4756b; border-radius: 0 0 8px 8px; }
-        .character-torso {
-            width: 32px; height: 40px; background: #4a90d9; border-radius: 6px 6px 12px 12px; margin-top: -4px; position: relative; z-index: 1; box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-        }
-        .character-torso::after { content: ''; position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 10px; height: 18px; background: #3a7ac9; border-radius: 3px; }
-        .character-arm { position: absolute; width: 12px; height: 6px; background: #ffdbb5; border-radius: 4px; z-index: 3; top: 30px; }
-        .character-arm.left { left: -12px; transform-origin: center right; }
-        .character-arm.right { right: -12px; transform-origin: center left; }
-        .character-legs { display: flex; gap: 8px; margin-top: -2px; }
-        .character-leg { width: 10px; height: 18px; background: #5a3a2a; border-radius: 0 0 4px 4px; }
 
-        .character.picking .character-body { animation: picking-bounce 0.3s ease-out; }
-        .character.picking .character-arm { animation: picking-arm 0.3s ease-out; }
-        @keyframes picking-bounce {
-            0% { transform: translateY(0); }
-            40% { transform: translateY(12px) scale(0.95); }
-            70% { transform: translateY(-3px) scale(1.02); }
-            100% { transform: translateY(0) scale(1); }
+        .character-body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
         }
+
+        .character-head {
+            width: 34px;
+            height: 34px;
+            background: #ffdbb5;
+            border-radius: 50%;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .character-head::after {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 38px;
+            height: 16px;
+            background: #8B4513;
+            border-radius: 50% 50% 0 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .character-head::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 42px;
+            height: 10px;
+            background: #a0522d;
+            border-radius: 50% 50% 0 0;
+        }
+
+        .character-face {
+            position: absolute;
+            top: 11px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+        }
+
+        .character-face span {
+            width: 3px;
+            height: 3px;
+            background: #333;
+            border-radius: 50%;
+        }
+
+        .character-smile {
+            position: absolute;
+            top: 17px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 4px;
+            border-bottom: 2px solid #d4756b;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .character-torso {
+            width: 32px;
+            height: 40px;
+            background: #4a90d9;
+            border-radius: 6px 6px 12px 12px;
+            margin-top: -4px;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        }
+
+        .character-torso::after {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 10px;
+            height: 18px;
+            background: #3a7ac9;
+            border-radius: 3px;
+        }
+
+        .character-arm {
+            position: absolute;
+            width: 12px;
+            height: 6px;
+            background: #ffdbb5;
+            border-radius: 4px;
+            z-index: 3;
+            top: 30px;
+        }
+
+        .character-arm.left {
+            left: -12px;
+            transform-origin: center right;
+        }
+
+        .character-arm.right {
+            right: -12px;
+            transform-origin: center left;
+        }
+
+        .character-legs {
+            display: flex;
+            gap: 8px;
+            margin-top: -2px;
+        }
+
+        .character-leg {
+            width: 10px;
+            height: 18px;
+            background: #5a3a2a;
+            border-radius: 0 0 4px 4px;
+        }
+
+        .character.picking .character-body {
+            animation: picking-bounce 0.3s ease-out;
+        }
+
+        .character.picking .character-arm {
+            animation: picking-arm 0.3s ease-out;
+        }
+
+        @keyframes picking-bounce {
+            0% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(12px) scale(0.95);
+            }
+
+            70% {
+                transform: translateY(-3px) scale(1.02);
+            }
+
+            100% {
+                transform: translateY(0) scale(1);
+            }
+        }
+
         @keyframes picking-arm {
-            0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(40deg); }
+
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            50% {
+                transform: rotate(40deg);
+            }
         }
 
         .floating-mushroom {
-            position: absolute; pointer-events: none; z-index: 20; font-size: 20px; animation: float-mushroom 0.8s ease-out forwards; filter: drop-shadow(0 0 6px rgba(255,107,107,0.7));
+            position: absolute;
+            pointer-events: none;
+            z-index: 20;
+            font-size: 20px;
+            animation: float-mushroom 0.8s ease-out forwards;
+            filter: drop-shadow(0 0 6px rgba(255, 107, 107, 0.7));
         }
+
         @keyframes float-mushroom {
-            0% { opacity: 1; transform: translateY(0) scale(0.5) rotate(0deg); }
-            50% { opacity: 1; transform: translateY(-50px) scale(1.2) rotate(15deg); }
-            100% { opacity: 0; transform: translateY(-110px) scale(0.8) rotate(30deg); }
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(0.5) rotate(0deg);
+            }
+
+            50% {
+                opacity: 1;
+                transform: translateY(-50px) scale(1.2) rotate(15deg);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-110px) scale(0.8) rotate(30deg);
+            }
         }
+
         .floating-text {
-            position: absolute; pointer-events: none; z-index: 25; font-weight: bold; font-size: 20px; color: var(--gold); text-shadow: 0 0 10px rgba(255,215,0,0.8), 0 2px 4px rgba(0,0,0,0.5); animation: float-text 0.9s ease-out forwards;
+            position: absolute;
+            pointer-events: none;
+            z-index: 25;
+            font-weight: bold;
+            font-size: 20px;
+            color: var(--gold);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 2px 4px rgba(0, 0, 0, 0.5);
+            animation: float-text 0.9s ease-out forwards;
         }
+
         @keyframes float-text {
-            0% { opacity: 1; transform: translateY(0) scale(1); }
-            50% { opacity: 1; transform: translateY(-40px) scale(1.2); }
-            100% { opacity: 0; transform: translateY(-80px) scale(0.8); }
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: translateY(-40px) scale(1.2);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-80px) scale(0.8);
+            }
         }
+
         .particle {
-            position: absolute; pointer-events: none; z-index: 18; border-radius: 50%; animation: particle-fly 0.7s ease-out forwards;
+            position: absolute;
+            pointer-events: none;
+            z-index: 18;
+            border-radius: 50%;
+            animation: particle-fly 0.7s ease-out forwards;
         }
+
         @keyframes particle-fly {
-            0% { opacity: 1; transform: translate(0, 0) scale(1); }
-            100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0); }
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(var(--dx), var(--dy)) scale(0);
+            }
         }
 
         .pick-btn-container {
-            position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); z-index: 15;
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 15;
         }
+
         .pick-btn {
             background: linear-gradient(180deg, #ff8a5c 0%, #e74c3c 100%);
-            border: 3px solid #c0392b; border-radius: 50px; padding: 10px 28px; font-size: 18px; font-weight: bold; color: #fff; cursor: pointer; letter-spacing: 2px; box-shadow: 0 6px 20px rgba(231,76,60,0.5), 0 2px 8px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.3); transition: all 0.15s; text-shadow: 0 2px 4px rgba(0,0,0,0.3); white-space: nowrap; position: relative; overflow: hidden;
+            border: 3px solid #c0392b;
+            border-radius: 50px;
+            padding: 10px 28px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            cursor: pointer;
+            letter-spacing: 2px;
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+            transition: all 0.15s;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
         }
-        .pick-btn::after { content: ''; position: absolute; top: 2px; left: 10%; right: 10%; height: 40%; background: linear-gradient(180deg, rgba(255,255,255,0.4) 0%, transparent 100%); border-radius: 50%; }
-        .pick-btn:hover { background: linear-gradient(180deg, #ff9a6c 0%, #f04c3c 100%); box-shadow: 0 8px 25px rgba(231,76,60,0.7), 0 4px 12px rgba(0,0,0,0.3); transform: translateY(-2px); }
-        .pick-btn:active { transform: translateY(2px) scale(0.97); box-shadow: 0 2px 10px rgba(231,76,60,0.4), 0 1px 4px rgba(0,0,0,0.3); }
-        .btn-mushroom-icon { font-size: 20px; display: inline-block; margin-right: 4px; animation: bounce-mushroom 1.5s ease-in-out infinite; }
+
+        .pick-btn::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 10%;
+            right: 10%;
+            height: 40%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, transparent 100%);
+            border-radius: 50%;
+        }
+
+        .pick-btn:hover {
+            background: linear-gradient(180deg, #ff9a6c 0%, #f04c3c 100%);
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.7), 0 4px 12px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .pick-btn:active {
+            transform: translateY(2px) scale(0.97);
+            box-shadow: 0 2px 10px rgba(231, 76, 60, 0.4), 0 1px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-mushroom-icon {
+            font-size: 20px;
+            display: inline-block;
+            margin-right: 4px;
+            animation: bounce-mushroom 1.5s ease-in-out infinite;
+        }
 
         /* ===== 主标签栏 ===== */
         .tabs {
@@ -284,6 +615,7 @@
             border-bottom: 2px solid var(--card-border);
             z-index: 10;
         }
+
         .tab-btn {
             flex: 1;
             background: transparent;
@@ -304,8 +636,17 @@
             justify-content: center;
             gap: 3px;
         }
-        .tab-btn:hover { color: var(--text); background: rgba(255,255,255,0.05); }
-        .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); text-shadow: 0 0 10px rgba(255,215,0,0.5); }
+
+        .tab-btn:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tab-btn.active {
+            color: var(--gold);
+            border-bottom-color: var(--gold);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
 
         /* 挑战徽章 */
         .tab-badge {
@@ -321,15 +662,28 @@
             min-width: 16px;
             height: 16px;
             line-height: 16px;
-            box-shadow: 0 0 10px rgba(231, 76, 60, 0.8), 0 0 3px rgba(0,0,0,0.5);
+            box-shadow: 0 0 10px rgba(231, 76, 60, 0.8), 0 0 3px rgba(0, 0, 0, 0.5);
             animation: badge-pulse 1.4s ease-in-out infinite;
             flex-shrink: 0;
         }
+
         @keyframes badge-pulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(231, 76, 60, 0.8); }
-            50% { transform: scale(1.12); box-shadow: 0 0 16px rgba(231, 76, 60, 1); }
+
+            0%,
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 10px rgba(231, 76, 60, 0.8);
+            }
+
+            50% {
+                transform: scale(1.12);
+                box-shadow: 0 0 16px rgba(231, 76, 60, 1);
+            }
         }
-        .tab-badge.hide { display: none; }
+
+        .tab-badge.hide {
+            display: none;
+        }
 
         /* ===== 内容区 ===== */
         .tab-content-wrapper {
@@ -342,23 +696,40 @@
             scrollbar-width: thin;
             scrollbar-color: #3a4a6e transparent;
         }
-        .tab-content-wrapper::-webkit-scrollbar { width: 5px; }
-        .tab-content-wrapper::-webkit-scrollbar-thumb { background: #3a4a6e; border-radius: 3px; }
-        .tab-content-wrapper::-webkit-scrollbar-track { background: transparent; }
 
-        .tab-content { display: none; padding: 10px 12px 14px; }
-        .tab-content.active { display: block; }
+        .tab-content-wrapper::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .tab-content-wrapper::-webkit-scrollbar-thumb {
+            background: #3a4a6e;
+            border-radius: 3px;
+        }
+
+        .tab-content-wrapper::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 10px 12px 14px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
 
         /* ===== 商店子标签 ===== */
         .shop-sub-tabs {
             display: flex;
             gap: 4px;
             margin-bottom: 8px;
-            background: rgba(0,0,0,0.25);
+            background: rgba(0, 0, 0, 0.25);
             border-radius: 10px;
             padding: 3px;
             border: 1px solid var(--card-border);
         }
+
         .shop-sub-tab {
             flex: 1;
             background: transparent;
@@ -373,45 +744,133 @@
             letter-spacing: 0.5px;
             white-space: nowrap;
         }
-        .shop-sub-tab:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+
+        .shop-sub-tab:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
         .shop-sub-tab.active {
             background: var(--btn-bg);
             color: var(--gold);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-            text-shadow: 0 0 8px rgba(255,215,0,0.4);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
         }
 
         /* ===== 商店物品（更紧凑） ===== */
-        .shop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
-        .shop-item {
-            background: var(--btn-bg); border: 2px solid var(--card-border); border-radius: 9px; padding: 6px 8px; cursor: pointer; transition: all 0.2s; position: relative; text-align: center;
+        .shop-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 7px;
         }
-        .shop-item:hover { background: var(--btn-hover); border-color: #4a6a9e; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.3); }
-        .shop-item.can-buy { border-color: var(--buyable); background: #2a4a3a; box-shadow: 0 0 14px rgba(107,203,119,0.2); }
-        .shop-item.can-buy:hover { border-color: #8edb9a; box-shadow: 0 0 22px rgba(107,203,119,0.4); }
-        .shop-item.not-buyable { opacity: 0.55; cursor: not-allowed; }
-        .shop-item.not-buyable:hover { transform: none; background: var(--btn-bg); border-color: var(--card-border); box-shadow: none; }
-        .shop-item.owned { border-color: var(--gold); }
-        .shop-item.silver-tool { border-left: 3px solid var(--silver); }
-        .shop-item.gold-tool { border-left: 3px solid var(--gold); }
-        .shop-item.silver-tool.can-buy { border-color: var(--silver); background: #2a3a4a; }
-        .shop-item.gold-tool.can-buy { border-color: var(--gold); background: #4a3a1a; }
-        .shop-item-icon { font-size: 22px; display: block; margin-bottom: 1px; }
-        .shop-item-name { font-size: 11px; font-weight: bold; color: var(--text); }
-        .shop-item-effect { font-size: 9px; color: var(--blue-accent); }
-        .shop-item-cost { font-size: 11px; font-weight: bold; }
-        .shop-item-cost.silver-cost { color: var(--silver); }
-        .shop-item-cost.gold-cost { color: var(--gold); }
-        .shop-item-count { font-size: 9px; color: var(--text-dim); }
+
+        .shop-item {
+            background: var(--btn-bg);
+            border: 2px solid var(--card-border);
+            border-radius: 9px;
+            padding: 6px 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            text-align: center;
+        }
+
+        .shop-item:hover {
+            background: var(--btn-hover);
+            border-color: #4a6a9e;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .shop-item.can-buy {
+            border-color: var(--buyable);
+            background: #2a4a3a;
+            box-shadow: 0 0 14px rgba(107, 203, 119, 0.2);
+        }
+
+        .shop-item.can-buy:hover {
+            border-color: #8edb9a;
+            box-shadow: 0 0 22px rgba(107, 203, 119, 0.4);
+        }
+
+        .shop-item.not-buyable {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        .shop-item.not-buyable:hover {
+            transform: none;
+            background: var(--btn-bg);
+            border-color: var(--card-border);
+            box-shadow: none;
+        }
+
+        .shop-item.owned {
+            border-color: var(--gold);
+        }
+
+        .shop-item.silver-tool {
+            border-left: 3px solid var(--silver);
+        }
+
+        .shop-item.gold-tool {
+            border-left: 3px solid var(--gold);
+        }
+
+        .shop-item.silver-tool.can-buy {
+            border-color: var(--silver);
+            background: #2a3a4a;
+        }
+
+        .shop-item.gold-tool.can-buy {
+            border-color: var(--gold);
+            background: #4a3a1a;
+        }
+
+        .shop-item-icon {
+            font-size: 22px;
+            display: block;
+            margin-bottom: 1px;
+        }
+
+        .shop-item-name {
+            font-size: 11px;
+            font-weight: bold;
+            color: var(--text);
+        }
+
+        .shop-item-effect {
+            font-size: 9px;
+            color: var(--blue-accent);
+        }
+
+        .shop-item-cost {
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .shop-item-cost.silver-cost {
+            color: var(--silver);
+        }
+
+        .shop-item-cost.gold-cost {
+            color: var(--gold);
+        }
+
+        .shop-item-count {
+            font-size: 9px;
+            color: var(--text-dim);
+        }
 
         /* ===== 兑换页 ===== */
         .exchange-section {
-            background: rgba(255,255,255,0.03);
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--card-border);
             border-radius: 10px;
             padding: 10px 12px;
             margin-bottom: 10px;
         }
+
         .exchange-title {
             font-size: 14px;
             font-weight: bold;
@@ -420,33 +879,56 @@
             align-items: center;
             gap: 6px;
         }
-        .exchange-title.silver-title { color: var(--silver); }
-        .exchange-title.gold-title { color: var(--gold); }
+
+        .exchange-title.silver-title {
+            color: var(--silver);
+        }
+
+        .exchange-title.gold-title {
+            color: var(--gold);
+        }
+
         .exchange-balance {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(0,0,0,0.25);
+            background: rgba(0, 0, 0, 0.25);
             border-radius: 7px;
             padding: 6px 10px;
             margin-bottom: 8px;
             font-size: 12px;
         }
-        .exchange-balance .bal-label { color: var(--text-dim); }
-        .exchange-balance .bal-value { font-weight: bold; font-size: 15px; }
-        .exchange-balance .bal-value.silver { color: var(--silver); }
-        .exchange-balance .bal-value.gold { color: var(--gold); }
+
+        .exchange-balance .bal-label {
+            color: var(--text-dim);
+        }
+
+        .exchange-balance .bal-value {
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .exchange-balance .bal-value.silver {
+            color: var(--silver);
+        }
+
+        .exchange-balance .bal-value.gold {
+            color: var(--gold);
+        }
+
         .exchange-rate {
             font-size: 10px;
             color: var(--text-dim);
             margin-bottom: 7px;
             text-align: center;
         }
+
         .exchange-btn-row {
             display: flex;
             gap: 5px;
             flex-wrap: wrap;
         }
+
         .exchange-btn {
             flex: 1;
             min-width: 55px;
@@ -461,15 +943,51 @@
             transition: all 0.2s;
             text-align: center;
         }
-        .exchange-btn:hover:not(:disabled) { background: var(--btn-hover); border-color: #4a6a9e; transform: translateY(-1px); }
-        .exchange-btn:active:not(:disabled) { transform: translateY(0); }
-        .exchange-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-        .exchange-btn.silver-btn { border-color: rgba(192,192,192,0.5); }
-        .exchange-btn.gold-btn { border-color: rgba(255,215,0,0.5); }
-        .exchange-btn.silver-btn:hover:not(:disabled) { border-color: var(--silver); box-shadow: 0 0 12px rgba(192,192,192,0.3); }
-        .exchange-btn.gold-btn:hover:not(:disabled) { border-color: var(--gold); box-shadow: 0 0 12px rgba(255,215,0,0.3); }
-        .exchange-btn .btn-big { font-size: 12px; display: block; }
-        .exchange-btn .btn-small { font-size: 8px; color: var(--text-dim); display: block; margin-top: 1px; }
+
+        .exchange-btn:hover:not(:disabled) {
+            background: var(--btn-hover);
+            border-color: #4a6a9e;
+            transform: translateY(-1px);
+        }
+
+        .exchange-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .exchange-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .exchange-btn.silver-btn {
+            border-color: rgba(192, 192, 192, 0.5);
+        }
+
+        .exchange-btn.gold-btn {
+            border-color: rgba(255, 215, 0, 0.5);
+        }
+
+        .exchange-btn.silver-btn:hover:not(:disabled) {
+            border-color: var(--silver);
+            box-shadow: 0 0 12px rgba(192, 192, 192, 0.3);
+        }
+
+        .exchange-btn.gold-btn:hover:not(:disabled) {
+            border-color: var(--gold);
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.3);
+        }
+
+        .exchange-btn .btn-big {
+            font-size: 12px;
+            display: block;
+        }
+
+        .exchange-btn .btn-small {
+            font-size: 8px;
+            color: var(--text-dim);
+            display: block;
+            margin-top: 1px;
+        }
 
         .exchange-mushroom-count {
             text-align: center;
@@ -477,130 +995,509 @@
             color: var(--text-dim);
             margin-bottom: 10px;
             padding: 7px;
-            background: rgba(0,0,0,0.25);
+            background: rgba(0, 0, 0, 0.25);
             border-radius: 8px;
         }
-        .exchange-mushroom-count b { color: var(--gold); font-size: 15px; }
+
+        .exchange-mushroom-count b {
+            color: var(--gold);
+            font-size: 15px;
+        }
 
         /* ===== 成就和挑战（更紧凑） ===== */
-        .achievement-list, .challenge-list { display: flex; flex-direction: column; gap: 5px; }
-        .achievement-item, .challenge-item {
-            background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); border-radius: 8px; padding: 6px 10px; display: flex; align-items: center; gap: 8px; transition: all 0.2s;
+        .achievement-list,
+        .challenge-list {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
         }
-        .achievement-item.locked { opacity: 0.5; filter: grayscale(0.8); }
-        .achievement-item.unlocked { border-color: var(--gold); background: rgba(255,215,0,0.05); }
-        .achievement-item.silver-ach.unlocked { border-color: var(--silver); background: rgba(192,192,192,0.05); }
-        .achievement-item.gold-ach.unlocked { border-color: var(--gold); background: rgba(255,215,0,0.08); }
-        .challenge-item.claimed { opacity: 0.6; }
-        .challenge-item.claimable { border-color: var(--green); background: rgba(107,203,119,0.05); animation: challenge-glow 2s ease-in-out infinite; }
+
+        .achievement-item,
+        .challenge-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 6px 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .achievement-item.locked {
+            opacity: 0.5;
+            filter: grayscale(0.8);
+        }
+
+        .achievement-item.unlocked {
+            border-color: var(--gold);
+            background: rgba(255, 215, 0, 0.05);
+        }
+
+        .achievement-item.silver-ach.unlocked {
+            border-color: var(--silver);
+            background: rgba(192, 192, 192, 0.05);
+        }
+
+        .achievement-item.gold-ach.unlocked {
+            border-color: var(--gold);
+            background: rgba(255, 215, 0, 0.08);
+        }
+
+        .challenge-item.claimed {
+            opacity: 0.6;
+        }
+
+        .challenge-item.claimable {
+            border-color: var(--green);
+            background: rgba(107, 203, 119, 0.05);
+            animation: challenge-glow 2s ease-in-out infinite;
+        }
+
         @keyframes challenge-glow {
-            0%, 100% { box-shadow: 0 0 0 rgba(107,203,119,0); }
-            50% { box-shadow: 0 0 12px rgba(107,203,119,0.4); }
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 rgba(107, 203, 119, 0);
+            }
+
+            50% {
+                box-shadow: 0 0 12px rgba(107, 203, 119, 0.4);
+            }
         }
-        .ach-icon, .ch-icon { font-size: 18px; }
-        .ach-info, .ch-info { flex: 1; }
-        .ach-name, .ch-name { font-weight: bold; font-size: 12px; }
-        .ach-desc, .ch-desc { font-size: 9px; color: var(--text-dim); }
-        .ach-status { font-size: 16px; }
+
+        .ach-icon,
+        .ch-icon {
+            font-size: 18px;
+        }
+
+        .ach-info,
+        .ch-info {
+            flex: 1;
+        }
+
+        .ach-name,
+        .ch-name {
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .ach-desc,
+        .ch-desc {
+            font-size: 9px;
+            color: var(--text-dim);
+        }
+
+        .ach-status {
+            font-size: 16px;
+        }
+
         .challenge-claim-btn {
-            background: var(--green-dark); border: none; color: #fff; padding: 4px 10px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 10px; transition: all 0.2s;
+            background: var(--green-dark);
+            border: none;
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 10px;
+            transition: all 0.2s;
         }
-        .challenge-claim-btn:hover:not(:disabled) { background: var(--green); }
-        .challenge-claim-btn:disabled { background: var(--not-buyable); cursor: not-allowed; color: #aaa; }
+
+        .challenge-claim-btn:hover:not(:disabled) {
+            background: var(--green);
+        }
+
+        .challenge-claim-btn:disabled {
+            background: var(--not-buyable);
+            cursor: not-allowed;
+            color: #aaa;
+        }
 
         /* ===== 提示 ===== */
         .achievement-toast {
-            position: fixed; top: 16px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #2a3a5e, #1a2a4e); border: 2px solid var(--gold); border-radius: 14px; padding: 12px 20px; font-size: 14px; font-weight: bold; color: var(--gold); z-index: 100; animation: toast-in 0.4s ease-out, toast-out 0.4s ease-in 2.5s forwards; box-shadow: 0 8px 30px rgba(0,0,0,0.6), 0 0 20px rgba(255,215,0,0.3); text-align: center; pointer-events: none; max-width: 90vw;
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #2a3a5e, #1a2a4e);
+            border: 2px solid var(--gold);
+            border-radius: 14px;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--gold);
+            z-index: 100;
+            animation: toast-in 0.4s ease-out, toast-out 0.4s ease-in 2.5s forwards;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 215, 0, 0.3);
+            text-align: center;
+            pointer-events: none;
+            max-width: 90vw;
         }
-        @keyframes toast-in { 0% { opacity: 0; transform: translateX(-50%) translateY(-30px) scale(0.8); } 100% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); } }
-        @keyframes toast-out { 0% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); } 100% { opacity: 0; transform: translateX(-50%) translateY(-20px) scale(0.9); } }
+
+        @keyframes toast-in {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-30px) scale(0.8);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0) scale(1);
+            }
+        }
+
+        @keyframes toast-out {
+            0% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0) scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px) scale(0.9);
+            }
+        }
 
         .offline-toast {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8); background: linear-gradient(135deg, #2d4a2d, #1a3a1a); border: 3px solid var(--green); border-radius: 18px; padding: 20px 26px; font-size: 14px; color: #e8ffe8; z-index: 200; text-align: center; box-shadow: 0 0 60px rgba(107,203,119,0.5), 0 20px 60px rgba(0,0,0,0.8); animation: offline-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; pointer-events: none; max-width: 85vw; line-height: 1.6;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            background: linear-gradient(135deg, #2d4a2d, #1a3a1a);
+            border: 3px solid var(--green);
+            border-radius: 18px;
+            padding: 20px 26px;
+            font-size: 14px;
+            color: #e8ffe8;
+            z-index: 200;
+            text-align: center;
+            box-shadow: 0 0 60px rgba(107, 203, 119, 0.5), 0 20px 60px rgba(0, 0, 0, 0.8);
+            animation: offline-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            pointer-events: none;
+            max-width: 85vw;
+            line-height: 1.6;
         }
-        .offline-toast .offline-title { font-size: 20px; font-weight: bold; color: var(--gold); margin-bottom: 6px; text-shadow: 0 0 15px rgba(255,215,0,0.6); }
-        .offline-toast .offline-highlight { color: var(--gold); font-weight: bold; font-size: 18px; text-shadow: 0 0 12px rgba(255,215,0,0.6); }
-        .offline-toast .offline-sub { font-size: 12px; color: var(--text-dim); margin-top: 6px; }
-        @keyframes offline-in { 0% { opacity: 0; transform: translate(-50%, -50%) scale(0.6); } 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
-        @keyframes offline-out { 0% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.85); } }
-        .offline-toast.hide { animation: offline-out 0.4s ease-in forwards; }
+
+        .offline-toast .offline-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--gold);
+            margin-bottom: 6px;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+        }
+
+        .offline-toast .offline-highlight {
+            color: var(--gold);
+            font-weight: bold;
+            font-size: 18px;
+            text-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
+        }
+
+        .offline-toast .offline-sub {
+            font-size: 12px;
+            color: var(--text-dim);
+            margin-top: 6px;
+        }
+
+        @keyframes offline-in {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.6);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        @keyframes offline-out {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.85);
+            }
+        }
+
+        .offline-toast.hide {
+            animation: offline-out 0.4s ease-in forwards;
+        }
 
         /* ===== 移动端适配 ===== */
         @media (max-width: 500px) {
-            body { padding: 6px; }
-            .game-container { border-radius: 16px; max-height: 100%; }
-            .header { padding: 7px 10px 5px; gap: 4px; }
-            .mushroom-icon-big { font-size: 22px; }
-            .mushroom-count { font-size: 17px; }
-            .count-label { font-size: 8px; }
-            .per-second-display { font-size: 9px; }
-            .per-second-display span { font-size: 11px; }
-            .rare-mini { font-size: 10px; padding: 2px 6px; }
-            .header-bottom { font-size: 9px; padding-top: 4px; }
-            .header-bottom b { font-size: 10px; }
+            body {
+                padding: 6px;
+            }
 
-            .scene { height: 200px; }
-            .character { transform: translateX(-50%) scale(0.9); bottom: 42px; }
-            .pick-btn { padding: 9px 22px; font-size: 16px; }
-            .btn-mushroom-icon { font-size: 18px; }
+            .game-container {
+                border-radius: 16px;
+                max-height: 100%;
+            }
 
-            .tab-btn { font-size: 10px; padding: 8px 1px; gap: 2px; }
-            .tab-badge { font-size: 9px; min-width: 14px; height: 14px; line-height: 14px; padding: 0 4px; }
-            .tab-content { padding: 9px 10px 12px; }
-            .shop-sub-tab { font-size: 11px; padding: 6px 4px; }
-            .shop-grid { gap: 6px; }
-            .shop-item { padding: 6px 7px; border-radius: 8px; }
-            .shop-item-icon { font-size: 20px; }
-            .shop-item-name { font-size: 10px; }
-            .shop-item-effect { font-size: 9px; }
-            .shop-item-cost { font-size: 10px; }
+            .header {
+                padding: 7px 10px 5px;
+                gap: 4px;
+            }
 
-            .exchange-section { padding: 9px 10px; }
-            .exchange-btn { font-size: 9px; padding: 5px 2px; }
-            .exchange-btn .btn-big { font-size: 11px; }
-            .exchange-btn .btn-small { font-size: 7px; }
+            .mushroom-icon-big {
+                font-size: 22px;
+            }
 
-            .ach-icon, .ch-icon { font-size: 16px; }
-            .ach-name, .ch-name { font-size: 11px; }
-            .ach-desc, .ch-desc { font-size: 9px; }
-            .challenge-claim-btn { font-size: 9px; padding: 3px 8px; }
+            .mushroom-count {
+                font-size: 17px;
+            }
+
+            .count-label {
+                font-size: 8px;
+            }
+
+            .per-second-display {
+                font-size: 9px;
+            }
+
+            .per-second-display span {
+                font-size: 11px;
+            }
+
+            .rare-mini {
+                font-size: 10px;
+                padding: 2px 6px;
+            }
+
+            .header-bottom {
+                font-size: 9px;
+                padding-top: 4px;
+            }
+
+            .header-bottom b {
+                font-size: 10px;
+            }
+
+            .scene {
+                height: 200px;
+            }
+
+            .character {
+                transform: translateX(-50%) scale(0.9);
+                bottom: 42px;
+            }
+
+            .pick-btn {
+                padding: 9px 22px;
+                font-size: 16px;
+            }
+
+            .btn-mushroom-icon {
+                font-size: 18px;
+            }
+
+            .tab-btn {
+                font-size: 10px;
+                padding: 8px 1px;
+                gap: 2px;
+            }
+
+            .tab-badge {
+                font-size: 9px;
+                min-width: 14px;
+                height: 14px;
+                line-height: 14px;
+                padding: 0 4px;
+            }
+
+            .tab-content {
+                padding: 9px 10px 12px;
+            }
+
+            .shop-sub-tab {
+                font-size: 11px;
+                padding: 6px 4px;
+            }
+
+            .shop-grid {
+                gap: 6px;
+            }
+
+            .shop-item {
+                padding: 6px 7px;
+                border-radius: 8px;
+            }
+
+            .shop-item-icon {
+                font-size: 20px;
+            }
+
+            .shop-item-name {
+                font-size: 10px;
+            }
+
+            .shop-item-effect {
+                font-size: 9px;
+            }
+
+            .shop-item-cost {
+                font-size: 10px;
+            }
+
+            .exchange-section {
+                padding: 9px 10px;
+            }
+
+            .exchange-btn {
+                font-size: 9px;
+                padding: 5px 2px;
+            }
+
+            .exchange-btn .btn-big {
+                font-size: 11px;
+            }
+
+            .exchange-btn .btn-small {
+                font-size: 7px;
+            }
+
+            .ach-icon,
+            .ch-icon {
+                font-size: 16px;
+            }
+
+            .ach-name,
+            .ch-name {
+                font-size: 11px;
+            }
+
+            .ach-desc,
+            .ch-desc {
+                font-size: 9px;
+            }
+
+            .challenge-claim-btn {
+                font-size: 9px;
+                padding: 3px 8px;
+            }
         }
 
         @media (max-height: 700px) {
-            .scene { height: 180px; }
-            .character { transform: translateX(-50%) scale(0.85); bottom: 38px; }
-            .grass-tuft { bottom: 45px; }
-            .scene-mushroom:nth-of-type(1) { bottom: 50px; }
-            .scene-mushroom:nth-of-type(2) { bottom: 46px; }
-            .scene-mushroom:nth-of-type(3) { bottom: 48px; }
-            .scene-mushroom:nth-of-type(4) { bottom: 49px; }
+            .scene {
+                height: 180px;
+            }
+
+            .character {
+                transform: translateX(-50%) scale(0.85);
+                bottom: 38px;
+            }
+
+            .grass-tuft {
+                bottom: 45px;
+            }
+
+            .scene-mushroom:nth-of-type(1) {
+                bottom: 50px;
+            }
+
+            .scene-mushroom:nth-of-type(2) {
+                bottom: 46px;
+            }
+
+            .scene-mushroom:nth-of-type(3) {
+                bottom: 48px;
+            }
+
+            .scene-mushroom:nth-of-type(4) {
+                bottom: 49px;
+            }
         }
 
         @media (max-height: 620px) {
-            .scene { height: 150px; }
-            .character { transform: translateX(-50%) scale(0.75); bottom: 32px; }
-            .pick-btn { padding: 7px 18px; font-size: 15px; }
-            .header { padding: 6px 10px 4px; }
-            .tab-btn { padding: 7px 1px; font-size: 10px; }
-            .grass-tuft { bottom: 36px; font-size: 16px; }
-            .grass-tuft:nth-child(2) { bottom: 30px; font-size: 20px; }
-            .grass-tuft:nth-child(3) { bottom: 34px; }
-            .grass-tuft:nth-child(4) { bottom: 33px; }
-            .scene-mushroom:nth-of-type(1) { bottom: 42px; }
-            .scene-mushroom:nth-of-type(2) { bottom: 36px; }
-            .scene-mushroom:nth-of-type(3) { bottom: 38px; }
-            .scene-mushroom:nth-of-type(4) { bottom: 40px; }
+            .scene {
+                height: 150px;
+            }
+
+            .character {
+                transform: translateX(-50%) scale(0.75);
+                bottom: 32px;
+            }
+
+            .pick-btn {
+                padding: 7px 18px;
+                font-size: 15px;
+            }
+
+            .header {
+                padding: 6px 10px 4px;
+            }
+
+            .tab-btn {
+                padding: 7px 1px;
+                font-size: 10px;
+            }
+
+            .grass-tuft {
+                bottom: 36px;
+                font-size: 16px;
+            }
+
+            .grass-tuft:nth-child(2) {
+                bottom: 30px;
+                font-size: 20px;
+            }
+
+            .grass-tuft:nth-child(3) {
+                bottom: 34px;
+            }
+
+            .grass-tuft:nth-child(4) {
+                bottom: 33px;
+            }
+
+            .scene-mushroom:nth-of-type(1) {
+                bottom: 42px;
+            }
+
+            .scene-mushroom:nth-of-type(2) {
+                bottom: 36px;
+            }
+
+            .scene-mushroom:nth-of-type(3) {
+                bottom: 38px;
+            }
+
+            .scene-mushroom:nth-of-type(4) {
+                bottom: 40px;
+            }
         }
 
         @media (max-height: 540px) {
-            .scene { height: 115px; }
-            .character { transform: translateX(-50%) scale(0.62); bottom: 24px; }
-            .pick-btn { padding: 5px 14px; font-size: 13px; }
-            .mushroom-icon-big { font-size: 20px; }
-            .mushroom-count { font-size: 16px; }
+            .scene {
+                height: 115px;
+            }
+
+            .character {
+                transform: translateX(-50%) scale(0.62);
+                bottom: 24px;
+            }
+
+            .pick-btn {
+                padding: 5px 14px;
+                font-size: 13px;
+            }
+
+            .mushroom-icon-big {
+                font-size: 20px;
+            }
+
+            .mushroom-count {
+                font-size: 16px;
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="game-container" id="gameContainer">
         <!-- 顶部信息栏 -->
@@ -662,7 +1559,8 @@
             <div class="pick-btn-container">
                 <button class="pick-btn" id="pickBtn"><span class="btn-mushroom-icon">🍄</span>采蘑菇！</button>
             </div>
-            <div id="floatContainer" style="position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:20;"></div>
+            <div id="floatContainer"
+                style="position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:20;"></div>
         </div>
 
         <!-- 主标签栏 -->
@@ -761,7 +1659,7 @@
     </div>
 
     <script>
-        (function() {
+        (function () {
             'use strict';
 
             const SAVE_KEY = 'mushroomGameSave_v7';
@@ -796,25 +1694,25 @@
                 unlockedAchievements: [],
                 challenges: {},
                 tools: [
-                    { id: 's_pick',    name: '银镐',    icon: '⚒️', baseCost: 2,  currency: 'silver', type: 'click', bonus: 2,    count: 0 },
-                    { id: 's_basket',  name: '银篮',    icon: '🧺', baseCost: 6,  currency: 'silver', type: 'click', bonus: 5,    count: 0 },
-                    { id: 's_shovel',  name: '银铲',    icon: '⛏️', baseCost: 15, currency: 'silver', type: 'click', bonus: 12,   count: 0 },
-                    { id: 's_drill',   name: '银钻',    icon: '💎', baseCost: 35, currency: 'silver', type: 'click', bonus: 30,   count: 0 },
-                    { id: 's_robot',   name: '银机器人', icon: '🤖', baseCost: 80, currency: 'silver', type: 'click', bonus: 75,   count: 0 },
-                    { id: 's_squirrel', name: '银松鼠',  icon: '🐿️', baseCost: 3,   currency: 'silver', type: 'auto', bonus: 2,    count: 0 },
-                    { id: 's_rabbit',   name: '银兔',    icon: '🐇', baseCost: 8,   currency: 'silver', type: 'auto', bonus: 5,    count: 0 },
-                    { id: 's_deer',     name: '银鹿',    icon: '🦌', baseCost: 20,  currency: 'silver', type: 'auto', bonus: 12,   count: 0 },
-                    { id: 's_elf',      name: '银精灵',  icon: '🧚', baseCost: 50,  currency: 'silver', type: 'auto', bonus: 30,   count: 0 },
-                    { id: 's_fairy',    name: '银仙子',  icon: '✨', baseCost: 120, currency: 'silver', type: 'auto', bonus: 75,   count: 0 },
-                    { id: 'g_pick',    name: '金镐',    icon: '⚒️', baseCost: 2,  currency: 'gold', type: 'click', bonus: 100,  count: 0 },
-                    { id: 'g_basket',  name: '金篮',    icon: '🧺', baseCost: 6,  currency: 'gold', type: 'click', bonus: 300,  count: 0 },
-                    { id: 'g_drill',   name: '金钻',    icon: '💎', baseCost: 15, currency: 'gold', type: 'click', bonus: 800,  count: 0 },
-                    { id: 'g_robot',   name: '金机器人', icon: '🦾', baseCost: 40, currency: 'gold', type: 'click', bonus: 2000, count: 0 },
-                    { id: 'g_squirrel', name: '金松鼠',  icon: '🐿️', baseCost: 3,   currency: 'gold', type: 'auto', bonus: 150,  count: 0 },
-                    { id: 'g_rabbit',   name: '金兔',    icon: '🐇', baseCost: 8,   currency: 'gold', type: 'auto', bonus: 400,  count: 0 },
-                    { id: 'g_deer',     name: '金鹿',    icon: '🦌', baseCost: 20,  currency: 'gold', type: 'auto', bonus: 1200, count: 0 },
-                    { id: 'g_elf',      name: '金精灵',  icon: '🧚', baseCost: 50,  currency: 'gold', type: 'auto', bonus: 3000, count: 0 },
-                    { id: 'g_king',     name: '黄金国王', icon: '👑', baseCost: 120, currency: 'gold', type: 'auto', bonus: 8000, count: 0 },
+                    { id: 's_pick', name: '银镐', icon: '⚒️', baseCost: 2, currency: 'silver', type: 'click', bonus: 2, count: 0 },
+                    { id: 's_basket', name: '银篮', icon: '🧺', baseCost: 6, currency: 'silver', type: 'click', bonus: 5, count: 0 },
+                    { id: 's_shovel', name: '银铲', icon: '⛏️', baseCost: 15, currency: 'silver', type: 'click', bonus: 12, count: 0 },
+                    { id: 's_drill', name: '银钻', icon: '💎', baseCost: 35, currency: 'silver', type: 'click', bonus: 30, count: 0 },
+                    { id: 's_robot', name: '银机器人', icon: '🤖', baseCost: 80, currency: 'silver', type: 'click', bonus: 75, count: 0 },
+                    { id: 's_squirrel', name: '银松鼠', icon: '🐿️', baseCost: 3, currency: 'silver', type: 'auto', bonus: 2, count: 0 },
+                    { id: 's_rabbit', name: '银兔', icon: '🐇', baseCost: 8, currency: 'silver', type: 'auto', bonus: 5, count: 0 },
+                    { id: 's_deer', name: '银鹿', icon: '🦌', baseCost: 20, currency: 'silver', type: 'auto', bonus: 12, count: 0 },
+                    { id: 's_elf', name: '银精灵', icon: '🧚', baseCost: 50, currency: 'silver', type: 'auto', bonus: 30, count: 0 },
+                    { id: 's_fairy', name: '银仙子', icon: '✨', baseCost: 120, currency: 'silver', type: 'auto', bonus: 75, count: 0 },
+                    { id: 'g_pick', name: '金镐', icon: '⚒️', baseCost: 2, currency: 'gold', type: 'click', bonus: 100, count: 0 },
+                    { id: 'g_basket', name: '金篮', icon: '🧺', baseCost: 6, currency: 'gold', type: 'click', bonus: 300, count: 0 },
+                    { id: 'g_drill', name: '金钻', icon: '💎', baseCost: 15, currency: 'gold', type: 'click', bonus: 800, count: 0 },
+                    { id: 'g_robot', name: '金机器人', icon: '🦾', baseCost: 40, currency: 'gold', type: 'click', bonus: 2000, count: 0 },
+                    { id: 'g_squirrel', name: '金松鼠', icon: '🐿️', baseCost: 3, currency: 'gold', type: 'auto', bonus: 150, count: 0 },
+                    { id: 'g_rabbit', name: '金兔', icon: '🐇', baseCost: 8, currency: 'gold', type: 'auto', bonus: 400, count: 0 },
+                    { id: 'g_deer', name: '金鹿', icon: '🦌', baseCost: 20, currency: 'gold', type: 'auto', bonus: 1200, count: 0 },
+                    { id: 'g_elf', name: '金精灵', icon: '🧚', baseCost: 50, currency: 'gold', type: 'auto', bonus: 3000, count: 0 },
+                    { id: 'g_king', name: '黄金国王', icon: '👑', baseCost: 120, currency: 'gold', type: 'auto', bonus: 8000, count: 0 },
                 ]
             };
 
@@ -834,32 +1732,32 @@
 
             // ============ 成就定义 ============
             const ACHIEVEMENT_DEFS = [
-                { id: 'mush_1',     name: '初次采菇', icon: '🍄', desc: '获得第1个普通蘑菇',     condition: () => gameState.totalEarned >= 1,   cls: '' },
-                { id: 'mush_100',   name: '小有收获', icon: '🌱', desc: '获得100个普通蘑菇',    condition: () => gameState.totalEarned >= 100, cls: '' },
-                { id: 'mush_10k',   name: '蘑菇大户', icon: '💰', desc: '获得1万普通蘑菇',      condition: () => gameState.totalEarned >= 10000, cls: '' },
-                { id: 'mush_1m',    name: '百万富翁', icon: '🏦', desc: '获得100万普通蘑菇',    condition: () => gameState.totalEarned >= 1000000, cls: '' },
-                { id: 'mush_1b',    name: '蘑菇传说', icon: '🌍', desc: '获得10亿普通蘑菇',     condition: () => gameState.totalEarned >= 1e9, cls: '' },
-                { id: 'silver_1',   name: '银色闪光', icon: '🥈', desc: '获得第1个银蘑菇',      condition: () => gameState.silverMushrooms >= 1,    cls: 'silver-ach' },
-                { id: 'silver_10',  name: '银光初现', icon: '⭐', desc: '拥有10个银蘑菇',       condition: () => gameState.silverMushrooms >= 10,   cls: 'silver-ach' },
-                { id: 'silver_100', name: '银光闪闪', icon: '🌟', desc: '拥有100个银蘑菇',      condition: () => gameState.silverMushrooms >= 100,  cls: 'silver-ach' },
-                { id: 'silver_1k',  name: '白银大师', icon: '💫', desc: '拥有1000个银蘑菇',     condition: () => gameState.silverMushrooms >= 1000, cls: 'silver-ach' },
-                { id: 'gold_1',     name: '金色曙光', icon: '🥇', desc: '获得第1个金蘑菇',      condition: () => gameState.goldMushrooms >= 1,      cls: 'gold-ach' },
-                { id: 'gold_10',    name: '黄金时代', icon: '👑', desc: '拥有10个金蘑菇',       condition: () => gameState.goldMushrooms >= 10,     cls: 'gold-ach' },
-                { id: 'gold_100',   name: '黄金帝国', icon: '🏆', desc: '拥有100个金蘑菇',      condition: () => gameState.goldMushrooms >= 100,    cls: 'gold-ach' },
-                { id: 'click_100',  name: '手有点酸', icon: '🤲', desc: '点击100次',            condition: () => gameState.totalClicks >= 100,   cls: '' },
-                { id: 'click_1000', name: '点击侠',   icon: '💥', desc: '点击1000次',           condition: () => gameState.totalClicks >= 1000,  cls: '' },
-                { id: 'click_10000',name: '点击之神', icon: '⚡', desc: '点击10000次',          condition: () => gameState.totalClicks >= 10000, cls: '' },
-                { id: 'tool_1',     name: '第一件工具', icon: '🧺', desc: '购买第1件工具',        condition: () => gameState.totalTools >= 1,   cls: '' },
-                { id: 'tool_10',    name: '工具收藏家', icon: '🗃️', desc: '拥有10件工具',         condition: () => gameState.totalTools >= 10,  cls: '' },
-                { id: 'tool_50',    name: '工具大师',   icon: '🛠️', desc: '拥有50件工具',         condition: () => gameState.totalTools >= 50,  cls: '' },
-                { id: 'tool_100',   name: '工具狂人',   icon: '⚙️', desc: '拥有100件工具',        condition: () => gameState.totalTools >= 100, cls: '' },
-                { id: 'power_10',   name: '强健体魄', icon: '💪', desc: '点击力量达到10',       condition: () => gameState.clickPower >= 10,   cls: '' },
-                { id: 'power_100',  name: '神力无敌', icon: '🦾', desc: '点击力量达到100',      condition: () => gameState.clickPower >= 100,  cls: '' },
-                { id: 'power_1000', name: '超凡入圣', icon: '🔥', desc: '点击力量达到1000',     condition: () => gameState.clickPower >= 1000, cls: '' },
-                { id: 'auto_1',     name: '自动化起步', icon: '🤖', desc: '每秒自动生产1蘑菇',     condition: () => gameState.autoRate >= 1,      cls: '' },
-                { id: 'auto_100',   name: '工业革命',   icon: '🏭', desc: '每秒自动生产100蘑菇',   condition: () => gameState.autoRate >= 100,    cls: '' },
-                { id: 'auto_10k',   name: '蘑菇工厂',   icon: '🌆', desc: '每秒自动生产1万蘑菇',   condition: () => gameState.autoRate >= 10000,  cls: '' },
-                { id: 'rare_buy',   name: '稀有买家', icon: '💎', desc: '购买任意稀有工具',     condition: () => gameState.totalTools >= 1, cls: '' },
+                { id: 'mush_1', name: '初次采菇', icon: '🍄', desc: '获得第1个普通蘑菇', condition: () => gameState.totalEarned >= 1, cls: '' },
+                { id: 'mush_100', name: '小有收获', icon: '🌱', desc: '获得100个普通蘑菇', condition: () => gameState.totalEarned >= 100, cls: '' },
+                { id: 'mush_10k', name: '蘑菇大户', icon: '💰', desc: '获得1万普通蘑菇', condition: () => gameState.totalEarned >= 10000, cls: '' },
+                { id: 'mush_1m', name: '百万富翁', icon: '🏦', desc: '获得100万普通蘑菇', condition: () => gameState.totalEarned >= 1000000, cls: '' },
+                { id: 'mush_1b', name: '蘑菇传说', icon: '🌍', desc: '获得10亿普通蘑菇', condition: () => gameState.totalEarned >= 1e9, cls: '' },
+                { id: 'silver_1', name: '银色闪光', icon: '🥈', desc: '获得第1个银蘑菇', condition: () => gameState.silverMushrooms >= 1, cls: 'silver-ach' },
+                { id: 'silver_10', name: '银光初现', icon: '⭐', desc: '拥有10个银蘑菇', condition: () => gameState.silverMushrooms >= 10, cls: 'silver-ach' },
+                { id: 'silver_100', name: '银光闪闪', icon: '🌟', desc: '拥有100个银蘑菇', condition: () => gameState.silverMushrooms >= 100, cls: 'silver-ach' },
+                { id: 'silver_1k', name: '白银大师', icon: '💫', desc: '拥有1000个银蘑菇', condition: () => gameState.silverMushrooms >= 1000, cls: 'silver-ach' },
+                { id: 'gold_1', name: '金色曙光', icon: '🥇', desc: '获得第1个金蘑菇', condition: () => gameState.goldMushrooms >= 1, cls: 'gold-ach' },
+                { id: 'gold_10', name: '黄金时代', icon: '👑', desc: '拥有10个金蘑菇', condition: () => gameState.goldMushrooms >= 10, cls: 'gold-ach' },
+                { id: 'gold_100', name: '黄金帝国', icon: '🏆', desc: '拥有100个金蘑菇', condition: () => gameState.goldMushrooms >= 100, cls: 'gold-ach' },
+                { id: 'click_100', name: '手有点酸', icon: '🤲', desc: '点击100次', condition: () => gameState.totalClicks >= 100, cls: '' },
+                { id: 'click_1000', name: '点击侠', icon: '💥', desc: '点击1000次', condition: () => gameState.totalClicks >= 1000, cls: '' },
+                { id: 'click_10000', name: '点击之神', icon: '⚡', desc: '点击10000次', condition: () => gameState.totalClicks >= 10000, cls: '' },
+                { id: 'tool_1', name: '第一件工具', icon: '🧺', desc: '购买第1件工具', condition: () => gameState.totalTools >= 1, cls: '' },
+                { id: 'tool_10', name: '工具收藏家', icon: '🗃️', desc: '拥有10件工具', condition: () => gameState.totalTools >= 10, cls: '' },
+                { id: 'tool_50', name: '工具大师', icon: '🛠️', desc: '拥有50件工具', condition: () => gameState.totalTools >= 50, cls: '' },
+                { id: 'tool_100', name: '工具狂人', icon: '⚙️', desc: '拥有100件工具', condition: () => gameState.totalTools >= 100, cls: '' },
+                { id: 'power_10', name: '强健体魄', icon: '💪', desc: '点击力量达到10', condition: () => gameState.clickPower >= 10, cls: '' },
+                { id: 'power_100', name: '神力无敌', icon: '🦾', desc: '点击力量达到100', condition: () => gameState.clickPower >= 100, cls: '' },
+                { id: 'power_1000', name: '超凡入圣', icon: '🔥', desc: '点击力量达到1000', condition: () => gameState.clickPower >= 1000, cls: '' },
+                { id: 'auto_1', name: '自动化起步', icon: '🤖', desc: '每秒自动生产1蘑菇', condition: () => gameState.autoRate >= 1, cls: '' },
+                { id: 'auto_100', name: '工业革命', icon: '🏭', desc: '每秒自动生产100蘑菇', condition: () => gameState.autoRate >= 100, cls: '' },
+                { id: 'auto_10k', name: '蘑菇工厂', icon: '🌆', desc: '每秒自动生产1万蘑菇', condition: () => gameState.autoRate >= 10000, cls: '' },
+                { id: 'rare_buy', name: '稀有买家', icon: '💎', desc: '购买任意稀有工具', condition: () => gameState.totalTools >= 1, cls: '' },
             ];
 
             // ============ DOM ============
@@ -1002,7 +1900,7 @@
                 });
                 shopGridEl.innerHTML = html;
                 shopGridEl.querySelectorAll('.shop-item').forEach(el => {
-                    el.addEventListener('click', function() {
+                    el.addEventListener('click', function () {
                         buyTool(this.dataset.toolId);
                     });
                 });
@@ -1030,7 +1928,7 @@
             }
 
             // ============ 兑换稀有蘑菇 ============
-            window.exchangeRare = function(currency, amount) {
+            window.exchangeRare = function (currency, amount) {
                 const rate = currency === 'silver' ? SILVER_RATE : GOLD_RATE;
                 const totalCost = rate * amount;
                 if (gameState.mushrooms < totalCost) {
@@ -1050,7 +1948,7 @@
                 saveGame();
             };
 
-            window.exchangeRareMax = function(currency) {
+            window.exchangeRareMax = function (currency) {
                 const rate = currency === 'silver' ? SILVER_RATE : GOLD_RATE;
                 const maxAmount = Math.floor(gameState.mushrooms / rate);
                 if (maxAmount <= 0) {
@@ -1181,7 +2079,7 @@
                 challengeListEl.innerHTML = html;
             }
 
-            window.claimChallenge = function(id) {
+            window.claimChallenge = function (id) {
                 const ch = CHALLENGE_DEFS.find(c => c.id === id);
                 if (!ch || gameState.challenges[id] || !ch.check()) return;
                 if (ch.rewardType === 'click') gameState.clickPowerBonus += ch.rewardValue;
@@ -1272,7 +2170,7 @@
 
             // ============ 主标签页切换 ============
             tabBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
+                btn.addEventListener('click', function () {
                     const tabName = this.dataset.tab;
                     tabBtns.forEach(b => b.classList.remove('active'));
                     tabContents.forEach(c => c.classList.remove('active'));
@@ -1286,7 +2184,7 @@
 
             // ============ 商店子标签切换 ============
             document.querySelectorAll('.shop-sub-tab').forEach(btn => {
-                btn.addEventListener('click', function() {
+                btn.addEventListener('click', function () {
                     const shopTab = this.dataset.shopTab;
                     if (shopTab === currentShopTab) return;
                     currentShopTab = shopTab;
@@ -1376,7 +2274,7 @@
             mushroomCountEl.addEventListener('mousedown', () => {
                 resetTimer = setTimeout(() => {
                     if (confirm('确定要重置游戏进度吗？')) {
-                        try { localStorage.removeItem(SAVE_KEY); } catch (e) {}
+                        try { localStorage.removeItem(SAVE_KEY); } catch (e) { }
                         gameState.mushrooms = 0; gameState.totalEarned = 0; gameState.totalClicks = 0;
                         gameState.clickPowerBonus = 0; gameState.autoRateBonus = 0;
                         gameState.silverMushrooms = 0; gameState.goldMushrooms = 0;
@@ -1397,4 +2295,5 @@
         })();
     </script>
 </body>
+
 </html>
