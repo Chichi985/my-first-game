@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>金库 · 点击挖金 🪙</title>
+<style>
+  :root {
+    --gold:        #ffd24a;
+    --gold-soft:   #f0b429;
+    --gold-dim:    #b8860b;
+    --gold-text:   #ffe9a8;
+    --cream:       #fff4cf;
+    --ink-light:   #f6e2ad;
+    --panel:       rgba(255, 235, 170, 0.05);
+    --panel-line:  rgba(255, 216, 110, 0.28);
+    --bg-0:        #1c1205;
+    --bg-1:        #2b1807;
+    --afford:      #3ddc6e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  html, body { min-height: 100%; }
+
+  body {
+    font-family: "Comic Sans MS", "Chalkboard SE", "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+    color: var(--ink-light);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100%;
+    overflow-y: auto;
+    user-select: none;
+    cursor: default;
+    /* 「金库」：漆黑底 + 中心上方的暖金色光晕 */
+    background:
+      radial-gradient(1100px 640px at 50% -8%, rgba(255, 186, 62, 0.20), transparent 62%),
+      radial-gradient(900px 520px at 85% 115%, rgba(230, 150, 40, 0.10), transparent 60%),
+      linear-gradient(180deg, var(--bg-1) 0%, var(--bg-0) 100%);
+  }
+  body::before { /* 极淡的金色网格/纹理，带“宝库”味道 */
+    content: "";
+    position: fixed; inset: 0;
+    background-image:
+      radial-gradient(circle, rgba(255, 220, 120, 0.05) 1px, transparent 1.5px);
+    background-size: 26px 26px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* 浮动金色光斑 */
+  .deco { position: fixed; border-radius: 50%; filter: blur(6px); pointer-events: none; z-index: 0;
+          background: radial-gradient(circle, rgba(255, 205, 90, 0.5), rgba(255, 190, 60, 0) 68%);
+          animation: floaty 7s ease-in-out infinite; }
+  .deco.d1 { width: 260px; height: 260px; top: -60px; left: -80px; }
+  .deco.d2 { width: 190px; height: 190px; top: 16%;  right: -70px; animation-delay: -2s; }
+  .deco.d3 { width: 300px; height: 300px; bottom: -90px; left: -110px; animation-delay: -4s; }
+  .deco.d4 { width: 170px; height: 170px; bottom: 6%; right: -60px; animation-delay: -1s; }
+  .deco.d5 { width: 120px; height: 120px; top: 55%;  right: 12%; opacity: .55; animation-delay: -3s; }
+  @keyframes floaty { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-22px) } }
+
+  .game {
+    position: relative; z-index: 1;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 34px; margin: auto; padding: 28px 16px 20px; width: 100%;
+  }
+
+  /* —— 顶部 HUD —— */
+  .hud { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+
+  .count-line {
+    display: flex; align-items: baseline; justify-content: center; gap: 12px;
+  }
+  .coin-icon {
+    font-size: clamp(40px, 9vw, 64px);
+    line-height: 1;
+    filter: drop-shadow(0 4px 8px rgba(255, 190, 40, 0.45));
+    animation: coin-spin 3.4s ease-in-out infinite;
+  }
+  @keyframes coin-spin { 0%,100% { transform: rotateY(0) } 50% { transform: rotateY(180deg) } }
+
+  .count {
+    font-size: clamp(56px, 15vw, 116px);
+    font-weight: 900;
+    line-height: 1.02;
+    letter-spacing: 1px;
+    color: transparent;
+    background: linear-gradient(180deg, #fff3b0 8%, var(--gold) 45%, #e8961a 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    filter: drop-shadow(0 0 16px rgba(255, 190, 40, 0.35)) drop-shadow(0 3px 0 rgba(120, 66, 0, 0.45));
+    font-variant-numeric: tabular-nums;
+  }
+
+  .income-total {
+    margin-top: 6px;
+    font-size: clamp(13px, 3.6vw, 17px);
+    font-weight: 600;
+    color: rgba(255, 228, 150, 0.78);
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+  .income-total b {
+    color: var(--gold);
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* —— 金币按钮 —— */
+  .coin-btn {
+    position: relative;
+    width: clamp(200px, 60vw, 250px);
+    height: clamp(200px, 60vw, 250px);
+    border-radius: 50%;
+    border: 3px solid rgba(255, 220, 120, 0.5);
+    cursor: pointer; outline: none; font-family: inherit;
+    background:
+      radial-gradient(circle at 30% 26%, #fff6b8 0%, #ffd84d 34%, #f0ad1d 66%, #b97a00 100%);
+    box-shadow:
+      0 0 0 8px rgba(255, 200, 60, 0.10),
+      0 16px 0 #7a4d00,
+      0 34px 60px rgba(255, 170, 30, 0.34),
+      inset 0 4px 12px rgba(255, 255, 255, 0.9),
+      inset 0 -12px 20px rgba(150, 90, 0, 0.35);
+    transition: transform .1s ease, box-shadow .1s ease;
+  }
+  .coin-btn::before {
+    content: ""; position: absolute; inset: 14px; border-radius: 50%;
+    border: 4px dashed rgba(150, 84, 0, 0.35); pointer-events: none;
+  }
+  .coin-btn:hover:not(:active) { transform: translateY(-4px) scale(1.02); }
+  .coin-btn:active {
+    transform: scale(0.94);
+    box-shadow:
+      0 6px 0 #7a4d00,
+      0 14px 26px rgba(255, 170, 30, 0.24),
+      inset 0 4px 12px rgba(255, 255, 255, 0.9),
+      inset 0 -12px 20px rgba(150, 90, 0, 0.35);
+  }
+  .coin-btn .sparkle {
+    position: absolute; top: 12%; left: 18%; font-size: 26px; opacity: .9;
+    pointer-events: none; animation: twinkle 2s ease-in-out infinite; z-index: 2;
+  }
+  .coin-btn .sparkle.s2 { top: auto; bottom: 14%; right: 16%; left: auto; animation-delay: -1s; }
+  @keyframes twinkle { 0%,100%{opacity:.3; transform:scale(.8)} 50%{opacity:1; transform:scale(1.15)} }
+  .coin-btn .label {
+    position: relative; z-index: 1;
+    font-size: clamp(26px, 8vw, 34px);
+    font-weight: 900; letter-spacing: 3px;
+    color: #6b4000;
+    text-shadow: 0 2px 0 rgba(255, 255, 255, 0.55);
+  }
+
+  /* —— 升级卡片网格 —— */
+  .upgrades {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: clamp(12px, 3vw, 18px);
+    width: 100%; max-width: 880px;
+  }
+  .up-card {
+    position: relative;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    padding: 20px 12px 18px;
+    border-radius: 24px;
+    background: linear-gradient(180deg, rgba(255, 236, 170, 0.10), rgba(255, 220, 120, 0.02));
+    border: 1px solid var(--panel-line);
+    box-shadow: 0 14px 26px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    color: var(--ink-light);
+    cursor: pointer; outline: none; font-family: inherit;
+    transition: transform .18s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
+  }
+  /* 状态：默认可点击的卡片即使暂时买不起也保留可悬停感 */
+  .up-card:hover:not(:disabled) {
+    transform: translateY(-6px);
+    border-color: rgba(255, 210, 90, 0.6);
+    box-shadow: 0 22px 40px rgba(0, 0, 0, 0.5), 0 0 22px rgba(255, 200, 70, 0.18);
+  }
+  .up-card:active:not(:disabled) { transform: translateY(-2px) scale(0.98); }
+  /* 卡片内部静态行文本也包裹一层，供闪绿回退时为底色循环沿用 */
+  .up-card.affordable { border-color: var(--afford); box-shadow: 0 0 0 1px rgba(61,220,110,.4), 0 14px 26px rgba(0,0,0,.35); }
+  .up-card:disabled { cursor: not-allowed; opacity: .62; }
+  .up-card:disabled:hover { transform: none; border-color: var(--panel-line); box-shadow: 0 14px 26px rgba(0,0,0,.3); }
+
+  .up-card.flash {          /* 购买成功瞬间闪绿 */
+    border-color: var(--afford);
+    animation: card-flash .6s ease;
+  }
+  @keyframes card-flash {
+    0%   { box-shadow: 0 0 0 rgba(61,220,110,0);  background: linear-gradient(180deg, rgba(255,236,170,.10), rgba(255,220,120,.02)); border-color: var(--afford); }
+    40%  { box-shadow: 0 0 34px rgba(90, 255, 130, 0.75); background: linear-gradient(180deg, rgba(90,255,130,.55), rgba(90,255,130,.18)); border-color: #baffd0; }
+    100% { box-shadow: 0 0 0 rgba(61,220,110,0);  background: linear-gradient(180deg, rgba(255,236,170,.10), rgba(255,220,120,.02)); border-color: var(--afford); }
+  }
+
+  .up-card .u-head {
+    display: flex; align-items: center; gap: 8px;
+    font-size: clamp(17px, 4.4vw, 21px); font-weight: 900;
+    color: var(--cream); white-space: nowrap;
+  }
+  .up-card .u-icon { font-size: clamp(26px, 7vw, 30px); line-height: 1; }
+  .up-card .u-count { display:flex; align-items:baseline; gap:5px; font-size: 14px; color: rgba(255,230,180,.85); font-weight:700 }
+  .up-card .u-count b { color: #fff; font-size: clamp(19px, 5vw, 23px); font-weight:900; font-variant-numeric: tabular-nums; }
+  .up-card .u-rate { font-size: 13px; font-weight:700; color: var(--gold-soft); white-space:nowrap; }
+  .up-card .u-cost {
+    margin-top: 6px; padding: 6px 15px; border-radius: 999px;
+    font-size: 15px; font-weight: 800; letter-spacing: .4px;
+    color: #4a3510;
+    background: linear-gradient(180deg, #ffe29a, #e0a72f);
+    box-shadow: inset 0 -2px 0 rgba(120, 70, 0, .25);
+  }
+  .up-card.affordable .u-cost { background: linear-gradient(180deg, #6ff09a, #25c05a); box-shadow: inset 0 -2px 0 rgba(0,90,30,.3); }
+  .up-card:not(.affordable) .u-cost { color: #7b6c50; background: linear-gradient(180deg, #5b5240, #4a4232); box-shadow: inset 0 -2px 0 rgba(0,0,0,.4); }
+
+  /* —— 重置按钮 —— */
+  .reset-line { margin-top: 4px; }
+  .reset-btn {
+    font-family: inherit; font-size: 14px; font-weight: 700; letter-spacing: 1.5px;
+    color: rgba(255, 225, 150, 0.7);
+    background: rgba(255, 220, 120, 0.08);
+    border: 1px solid rgba(255, 215, 110, 0.3);
+    border-radius: 999px; padding: 9px 24px; cursor: pointer; outline: none;
+    transition: transform .12s ease, background .2s ease, color .2s ease, border-color .2s ease;
+  }
+  .reset-btn:hover { background: rgba(255, 220, 150, .16); color: var(--cream); border-color: rgba(255, 215, 110, .5); transform: scale(1.05); }
+  .reset-btn:active { transform: scale(0.96); }
+
+  /* —— 称号徽章（按每秒收入分级） —— */
+  .tier-badge {
+    margin-top: 10px;
+    padding: 7px 20px;
+    border-radius: 999px;
+    font-size: clamp(13px, 3.6vw, 17px);
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: var(--gold-text);
+    background: linear-gradient(180deg, rgba(255, 215, 120, 0.22), rgba(255, 190, 60, 0.08));
+    border: 1px solid rgba(255, 215, 110, 0.45);
+    box-shadow: 0 0 16px rgba(255, 190, 60, 0.12), inset 0 1px 0 rgba(255,255,255,.10);
+    white-space: nowrap;
+  }
+
+  /* —— 成就区 —— */
+  .achievements { width: 100%; max-width: 880px; }
+  .ach-head {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+    margin-bottom: 14px;
+  }
+  .ach-title {
+    font-size: clamp(22px, 6vw, 28px);
+    font-weight: 900;
+    color: transparent;
+    background: linear-gradient(180deg, #fff3b0, var(--gold));
+    -webkit-background-clip: text; background-clip: text;
+    filter: drop-shadow(0 2px 6px rgba(255, 190, 40, 0.3));
+    letter-spacing: 1px;
+  }
+  .ach-count {
+    font-size: 14px; font-weight: 800; letter-spacing: 1.5px;
+    color: var(--gold-text);
+    background: rgba(255, 215, 120, 0.12);
+    border: 1px solid rgba(255, 215, 110, 0.35);
+    border-radius: 999px; padding: 4px 14px;
+  }
+  .ach-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: clamp(11px, 2.6vw, 16px);
+  }
+  /* 默认即“未解锁”：灰暗、近乎无光泽 */
+  .ach-item {
+    display: flex; flex-direction: column; align-items: center; gap: 7px;
+    padding: 16px 12px 14px;
+    text-align: center;
+    border-radius: 20px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.01));
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    box-shadow: 0 10px 18px rgba(0, 0, 0, 0.25);
+    color: #6f6755;
+  }
+  .ach-item .a-ic { font-size: clamp(26px, 7vw, 32px); line-height: 1; filter: grayscale(1) opacity(.5); }
+  .ach-item .a-name { font-size: 15px; font-weight: 800; color: #8b8270; white-space: nowrap; }
+  .ach-item .a-desc { font-size: clamp(10px, 2.8vw, 12px); line-height: 1.35; color: rgba(120, 112, 92, 0.8); }
+
+  /* 已解锁：金卡 + 辉光 */
+  .ach-item.done {
+    background: linear-gradient(180deg, rgba(255, 224, 150, 0.20), rgba(255, 190, 60, 0.05));
+    border: 1px solid rgba(255, 205, 90, 0.55);
+    box-shadow: 0 0 18px rgba(255, 190, 60, 0.14), 0 10px 18px rgba(0, 0, 0, 0.28);
+    color: var(--cream);
+  }
+  .ach-item.done .a-ic { filter: none; }
+  .ach-item.done .a-name { color: var(--gold-text); }
+  .ach-item.done .a-desc { color: rgba(255, 226, 150, 0.85); }
+
+  /* —— 点击飘字 —— */
+  .plus-one {
+    position: fixed; pointer-events: none; z-index: 20;
+    font-size: clamp(30px, 9vw, 44px); font-weight: 900;
+    color: transparent;
+    background: linear-gradient(180deg, #fff7c8, var(--gold));
+    -webkit-background-clip: text; background-clip: text;
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,.5)) drop-shadow(0 0 10px rgba(255, 200, 60, .6));
+    animation: float-up .85s ease-out forwards;
+  }
+  @keyframes float-up {
+    0%   { opacity: 1; transform: translate(-50%,10px) scale(.7); }
+    30%  { opacity: 1; transform: translate(-50%,-12px) scale(1.2); }
+    100% { opacity: 0; transform: translate(-50%,-96px) scale(1); }
+  }
+
+  .hint {
+    position: fixed; bottom: 14px; left: 0; right: 0; text-align: center;
+    font-size: 13px; color: rgba(255, 224, 150, 0.5);
+    pointer-events: none; z-index: 1;
+  }
+</style>
+</head>
+<body>
+  <div class="deco d1"></div>
+  <div class="deco d2"></div>
+  <div class="deco d3"></div>
+  <div class="deco d4"></div>
+  <div class="deco d5"></div>
+
+  <main class="game">
+    <div class="hud">
+      <div class="count-line">
+        <span class="coin-icon">🪙</span>
+        <span class="count" id="count">0</span>
+      </div>
+      <div class="income-total">⚡ 每秒收入　<b id="incomeTotal">0</b> / 秒</div>
+      <div class="tier-badge" id="tierBadge">🏠 小作坊</div>
+    </div>
+
+    <button class="coin-btn" id="coinBtn" aria-label="点击挖金">
+      <span class="sparkle">✨</span>
+      <span class="label">点击挖金</span>
+      <span class="sparkle s2">✨</span>
+    </button>
+
+    <div class="upgrades" id="upgrades"></div>
+
+    <section class="achievements" aria-label="成就">
+      <div class="ach-head">
+        <h2 class="ach-title">🏆 成就</h2>
+        <span class="ach-count" id="achCount">0/6</span>
+      </div>
+      <div class="ach-grid" id="achGrid"></div>
+    </section>
+
+    <div class="reset-line">
+      <button class="reset-btn" id="resetBtn" type="button">🔄 重置游戏</button>
+    </div>
+  </main>
+
+  <p class="hint">每点一下，就挖一枚金币 🎉</p>
+
+<script>
+  (function () {
+    var coins = 0;
+
+    // 四种升级配置：名称、图标、基础价格、基础每秒产量
+    // 每种的价格每次翻倍：第 n+1 件价格 = baseCost * 2^n
+    var PRODUCERS = [
+      { name: "矿工",     icon: "⛏️", baseCost: 10,    rate: 1   },
+      { name: "矿车",     icon: "🛒", baseCost: 100,   rate: 8   },
+      { name: "金矿",     icon: "⛰️", baseCost: 1000,  rate: 50  },
+      { name: "魔法金矿", icon: "✨", baseCost: 10000, rate: 300 }
+    ];
+    // 每种已购买的数量（索引与上面数组对齐）
+    var owned = [0, 0, 0, 0];
+
+    // —— 成就相关状态 ——
+    var lifetime = 0;    // 历史累计“获得”的金币（消费不减，供累计类成就判定）
+    var unlocked = [false, false, false, false, false, false];  // 各成就是否已解锁（持久化）
+    var announced = [false, false, false, false, false, false]; // 本次会话是否已弹过解锁提示
+
+    var countEl = document.getElementById("count");
+    var incomeTotalEl = document.getElementById("incomeTotal");
+    var btn = document.getElementById("coinBtn");
+    var upgradesEl = document.getElementById("upgrades");
+    var tierEl = document.getElementById("tierBadge");
+    var achCountEl = document.getElementById("achCount");
+    var achGridEl = document.getElementById("achGrid");
+    var achCards = []; // 依次保存成就卡节点，便于刷新状态
+
+    // ---- 金币数字“滚动过渡” ----
+    // 显示值缓慢逼近目标值，避免每次变化瞬间大跳
+    var shownCoins = 0;      // 当前展示给用户的数值（内部完整整数）
+    var tweenId = null;      // 当前动画帧句柄
+    function setCoinText(target) {
+      var from = shownCoins;
+      var to = target;
+      var start = null;
+      if (tweenId) { cancelAnimationFrame(tweenId); }
+      if (Math.abs(to - from) < 0.6) {          // 变化过小：直接落地
+        shownCoins = to;
+        countEl.textContent = pretty(Math.round(shownCoins));
+        return;
+      }
+      function step(ts) {
+        if (start === null) start = ts;
+        var p = Math.min(1, (ts - start) / 360);   // 0.36s 内到达
+        var eased = 1 - Math.pow(1 - p, 3);        // easeOutCubic
+        shownCoins = from + (to - from) * eased;
+        countEl.textContent = pretty(Math.round(shownCoins));
+        if (p < 1) { tweenId = requestAnimationFrame(step); }
+        else {
+          shownCoins = to;
+          countEl.textContent = pretty(Math.round(to));
+          tweenId = null;
+        }
+      }
+      tweenId = requestAnimationFrame(step);
+    }
+
+    // ---- 存档 / 离线收益 / 重置 ----
+    var KEY = 'coinClickerSave_v1';
+    var pendingWelcome = null; // 待画面刷新后再弹出的欢迎提示
+
+    // 把当前进度写入 localStorage（含最后保存时间戳）
+    function saveGame() {
+      try {
+        localStorage.setItem(KEY, JSON.stringify({
+          coins: coins,
+          owned: owned,
+          ts: Date.now(),
+          lifetime: lifetime,
+          unlocked: unlocked
+        }));
+      } catch (e) { /* 隐私模式等写失败时静默忽略 */ }
+    }
+
+    // 移除存档
+    function clearSave() {
+      try { localStorage.removeItem(KEY); } catch (e) {}
+    }
+
+    // 打开页面后：读档 → 恢复进度 → 结算离线收益
+    function applyLoadAndOffline() {
+      var data = null;
+      try {
+        var raw = localStorage.getItem(KEY);
+        if (raw) data = JSON.parse(raw);
+      } catch (e) { data = null; }
+
+      if (!data || !Array.isArray(data.owned)) return; // 无存档时保持默认(全 0)
+
+      // 1) 恢复金币与各类数量
+      if (typeof data.coins === 'number' && !isNaN(data.coins)) coins = data.coins;
+      for (var i = 0; i < PRODUCERS.length; i++) {
+        var v = +data.owned[i];
+        owned[i] = (v > 0 && !isNaN(v)) ? Math.floor(v) : 0;
+      }
+
+      // 2) 恢复“累计金币”与已解锁成就（兼容旧存档：用当前金币兜底估算累计额）
+      var lv = +data.lifetime;
+      lifetime = (!isNaN(lv) && lv > 0) ? lv : coins;
+      if (Array.isArray(data.unlocked)) {
+        for (var ui = 0; ui < unlocked.length; ui++) {
+          unlocked[ui] = !!data.unlocked[ui];
+        }
+      }
+
+      // 3) 离线收益：距上次保存的秒数 × 每秒总收入
+      var nowTs = Date.now();
+      var lastTs = +data.ts || nowTs;
+      var offlineSec = Math.floor((nowTs - lastTs) / 1000);
+      var rate = totalIncome();
+      if (offlineSec > 10 && rate > 0) {           // 仅超过 10 秒才触发
+        var gained = rate * offlineSec;
+        addCoins(gained);                          // 计入余额与累计
+        pendingWelcome = { sec: offlineSec, gained: gained }; // 待 render 后弹出
+      }
+    }
+
+    // 离线归来说明的提示
+    function welcomeBack(offlineSec, gained) {
+      var minutes = Math.max(1, Math.ceil(offlineSec / 60)); // 用分钟上报，至少 1 分钟
+      window.alert('🎉 欢迎回来！你离开了 ' + minutes + ' 分钟，离线期间赚了 ' + pretty(gained) + ' 金币');
+    }
+
+    // 彻底重置：清空界面、累计与解锁进度，另清空存档
+    function resetGame() {
+      coins = 0;
+      lifetime = 0;
+      for (var i = 0; i < owned.length; i++) owned[i] = 0;
+      for (var ai = 0; ai < unlocked.length; ai++) { unlocked[ai] = false; announced[ai] = false; }
+      render();
+      clearSave();
+      saveGame(); // 从新的时间点开始计时
+    }
+
+    // “获得”金币：余额与历史累计同时增加（购买消费不扣累计）
+    function addCoins(n) {
+      coins += n;
+      lifetime += n;
+    }
+
+    // 数字格式化：>1,000,000 用 M，>1,000 用 K，否则原样整数
+    function pretty(n) {
+      if (isNaN(n)) return "0";
+      if (n >= 1000000) {
+        var m = n / 1000000;
+        return (m % 1 === 0 ? m : m.toFixed(1)) + 'M';
+      }
+      if (n >= 1000) {
+        var k = n / 1000;
+        return (k % 1 === 0 ? k : k.toFixed(1)) + 'K';
+      }
+      return Math.floor(n).toString();
+    }
+
+    // 下一个的购买价格（当前数量 n 时 = baseCost * 2^n）
+    function cost(i) { return PRODUCERS[i].baseCost * Math.pow(2, owned[i]); }
+
+    // 每种当前每秒产量（本卡片类型全部产量 = 数量 * 单件率）
+    function prodOf(i) { return owned[i] * PRODUCERS[i].rate; }
+
+    // 每秒总收入
+    function totalIncome() {
+      var s = 0;
+      for (var i = 0; i < PRODUCERS.length; i++) s += prodOf(i);
+      return s;
+    }
+
+    // —— 称号（随每秒收入变化） ——
+    function titleFor(rate) {
+      if (rate < 10)  return '🏠 小作坊';
+      if (rate < 100) return '🏭 小型工厂';
+      if (rate < 1000) return '🏢 大型企业';
+      return '👑 金币帝国';   // rate >= 1000
+    }
+
+    // —— 成就元数据与判定 ——
+    var ACH_LIST = [
+      { ic: '🥉', name: '第一桶金',   desc: '累计获得金币达 100' },
+      { ic: '🥈', name: '小有积蓄',   desc: '累计获得金币达 10,000' },
+      { ic: '🥇', name: '百万富翁',   desc: '累计获得金币达 1,000,000' },
+      { ic: '⛏️', name: '矿工队长',   desc: '拥有 50 个矿工' },
+      { ic: '💰', name: '印钞机',     desc: '每秒收入达 1,000' },
+      { ic: '🎯', name: '全能投资家', desc: '4 种升级各至少拥有 1 个' }
+    ];
+    // i 号成就当前是否达成（仅做条件判断，不改状态）
+    function isAchieved(i) {
+      if (i === 0) return lifetime >= 100;
+      if (i === 1) return lifetime >= 10000;
+      if (i === 2) return lifetime >= 1000000;
+      if (i === 3) return owned[0] >= 50;                     // 矿工数量
+      if (i === 4) return totalIncome() >= 1000;              // 每秒收入
+      if (i === 5) return owned[0] >= 1 && owned[1] >= 1 && owned[2] >= 1 && owned[3] >= 1;
+      return false;
+    }
+
+    // 构建成就卡 DOM（一次），各卡结构固定，后续只切 .done 状态
+    function buildAchievements() {
+      for (var i = 0; i < ACH_LIST.length; i++) {
+        (function (idx) {
+          var a = ACH_LIST[idx];
+          var el = document.createElement("div");
+          el.className = "ach-item";
+          el.innerHTML =
+            '<span class="a-ic">' + a.ic + '</span>' +
+            '<span class="a-name">' + a.name + '</span>' +
+            '<span class="a-desc">' + a.desc + '</span>';
+          achGridEl.appendChild(el);
+          achCards[idx] = el;
+        })(i);
+      }
+    }
+
+    // 检测新解锁成就 → 集合 & 判定刷新视图。达成第一次时弹窗提示。
+    function updateAchievements() {
+      var newly = [];
+
+      // 集齐本次应解锁的成就（仅在状态翻转时收集一次，避免重复弹窗）
+      for (var i = 0; i < ACH_LIST.length; i++) {
+        if (!unlocked[i] && isAchieved(i)) {
+          unlocked[i] = true;
+          announced[i] = true;      // 阻止同一会话重复提醒
+          newly.push(ACH_LIST[i]);
+        }
+      }
+
+      // 刷新卡片样式与计数器
+      var doneCount = 0;
+      for (var j = 0; j < achCards.length; j++) {
+        if (unlocked[j]) {
+          achCards[j].classList.remove("ach-item");
+          achCards[j].classList.add("ach-item", "done");
+          doneCount++;
+        } else {
+          achCards[j].classList.remove("done");
+        }
+      }
+      achCountEl.textContent = doneCount + '/' + ACH_LIST.length;
+
+      // 弹出刚解锁的成就（一条提示囊括本次全部新增，避免弹窗刷屏）
+      if (newly.length > 0) {
+        var lines = ['🎉 解锁新成就！'];
+        for (var k = 0; k < newly.length; k++) lines.push('🏆 ' + newly[k].ic + ' ' + newly[k].name);
+        window.alert(lines.join('\n'));
+        saveGame();   // 解锁立即可落盘
+      }
+    }
+
+    // 购买成功时让卡片闪一下绿
+    function flashCard(el) {
+      el.classList.remove('flash');
+      void el.offsetWidth;
+      el.classList.add('flash');
+    }
+
+    // 构建四种升级卡片的 DOM（仅一次），之后每次 render() 更新数值/可用态
+    function buildCards() {
+      for (var i = 0; i < PRODUCERS.length; i++) {
+        (function (idx) {
+          var c = PRODUCERS[idx];
+          var el = document.createElement("button");
+          el.className = "up-card";
+          el.dataset.idx = idx;
+          el.innerHTML =
+            '<span class="u-head"><span class="u-icon">' + c.icon + '</span>' + c.name + '</span>' +
+            '<span class="u-count">拥有 ×<b class="c-count">0</b></span>' +
+            '<span class="u-rate">⚡ 每秒 +<b class="c-rate">' + c.rate + '</b></span>' +
+            '<span class="u-cost">🪙 <b class="c-cost">10</b></span>';
+          // 记录内部可更新节点引用，避免每次重建
+          el.$count = el.querySelector(".c-count");
+          el.$rate = el.querySelector(".c-rate");
+          el.$cost = el.querySelector(".c-cost");
+          el.addEventListener("click", function () {
+            if (buy(idx)) flashCard(el);   // 购买成功 → 闪绿
+          });
+          upgradesEl.appendChild(el);
+        })(i);
+      }
+    }
+
+    function buy(idx) {
+      var need = cost(idx);
+      if (coins < need) return false;  // 买不起：忽略
+      coins -= need;
+      owned[idx] += 1;                 // 获得一件
+      render();
+      saveGame();                      // 购买后即刻落盘，防意外丢失
+      return true;
+    }
+
+    // 每秒自动生产（总收入金币）
+    setInterval(function () {
+      var income = totalIncome();
+      if (income > 0) {
+        addCoins(income);          // 每秒自动生产获得的金币（计入累计）
+        render();
+      }
+    }, 1000);
+
+    // 同步全部界面：金币、总收入、每张卡片数量/产量/价格/可用（绿色）或不可用（灰色）
+    function render() {
+      setCoinText(coins);
+      incomeTotalEl.textContent = pretty(totalIncome());
+
+      var cards = upgradesEl.querySelectorAll(".up-card");
+      for (var i = 0; i < PRODUCERS.length; i++) {
+        var el = cards[i];
+        var need = cost(i);
+        el.$count.textContent = owned[i];
+        el.$rate.textContent = PRODUCERS[i].rate;       // 单件率保持不变
+        el.$cost.textContent = pretty(need);
+        if (coins >= need) {
+          el.classList.add("affordable");
+          el.disabled = false;
+        } else {
+          el.classList.remove("affordable");
+          el.disabled = true;   // 买不起：不能点击
+        }
+      }
+
+      tierEl.textContent = titleFor(totalIncome());      // 按收入更新称号
+      updateAchievements();                              // 判定并刷新成就视图
+    }
+
+    function handleClick(e) {
+      addCoins(1);                 // 点一次获得 1 金币（计入累计）
+      render();
+      spawnPlusOne(e.clientX || btn.getBoundingClientRect().left, e.clientY || btn.getBoundingClientRect().top);
+    }
+
+    function spawnPlusOne(x, y) {
+      var p = document.createElement("div");
+      p.className = "plus-one";
+      p.textContent = "+1";
+      p.style.left = x + "px";
+      p.style.top = (y - 20) + "px";
+      document.body.appendChild(p);
+      p.addEventListener("animationend", function () { p.remove(); });
+    }
+
+    btn.addEventListener("click", handleClick);
+    buildCards();
+    buildAchievements();
+    setCoinText(0);   // 先把展示计数归位（存档读取后 render 会滚到目标）
+
+    var resetBtn = document.getElementById("resetBtn");
+    resetBtn.addEventListener("click", function () {
+      if (window.confirm("确定要重置游戏吗？所有进度都会被清空！")) {
+        resetGame();
+      }
+    });
+
+    // 读档 + 结算离线收益（离线>10秒会在其中弹欢迎提示）
+    applyLoadAndOffline();
+
+    // 自动保存：每 10 秒写一次；页面关闭/切换前再补存一次
+    setInterval(saveGame, 10000);
+    window.addEventListener("beforeunload", saveGame);
+    window.addEventListener("pagehide", saveGame);
+
+    render();   // 显示（含离线加成的）当前进度——数字会自动滚动到位
+    saveGame(); // 进入游戏时立即确认时间起点
+
+    // 若刚结算了离线收益，画面刷新后再弹欢迎提示
+    if (pendingWelcome) {
+      welcomeBack(pendingWelcome.sec, pendingWelcome.gained);
+      pendingWelcome = null;
+    }
+  })();
+</script>
+</body>
+</html>
