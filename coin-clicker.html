@@ -262,6 +262,16 @@
     border: 1px solid rgba(255, 215, 110, 0.35);
     border-radius: 999px; padding: 4px 14px;
   }
+  .ach-head-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+  .ach-bonus {
+    font-size: 13px; font-weight: 800; letter-spacing: 1px;
+    color: #ffd98a;
+    background: rgba(255, 200, 80, 0.14);
+    border: 1px solid rgba(255, 205, 90, 0.4);
+    border-radius: 999px; padding: 4px 14px;
+    white-space: nowrap;
+  }
+  .ach-bonus b { color: #7dffa5; font-variant-numeric: tabular-nums; }
   .ach-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -281,6 +291,22 @@
   .ach-item .a-ic { font-size: clamp(26px, 7vw, 32px); line-height: 1; filter: grayscale(1) opacity(.5); }
   .ach-item .a-name { font-size: 15px; font-weight: 800; color: #8b8270; white-space: nowrap; }
   .ach-item .a-desc { font-size: clamp(10px, 2.8vw, 12px); line-height: 1.35; color: rgba(120, 112, 92, 0.8); }
+  .ach-item .a-bonus {
+    margin-top: 2px;
+    font-size: clamp(10px, 2.8vw, 12px);
+    font-weight: 800;
+    color: rgba(130, 122, 100, 0.85);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    padding: 2px 10px;
+    white-space: nowrap;
+  }
+  .ach-item.done .a-bonus {
+    color: #7dffa5;
+    background: rgba(90, 255, 130, 0.12);
+    border-color: rgba(90, 255, 130, 0.35);
+  }
 
   /* 已解锁：金卡 + 辉光 */
   .ach-item.done {
@@ -344,7 +370,10 @@
     <section class="achievements" aria-label="成就">
       <div class="ach-head">
         <h2 class="ach-title">🏆 成就</h2>
-        <span class="ach-count" id="achCount">0/6</span>
+        <div class="ach-head-right">
+          <span class="ach-bonus">全局加成 <b id="bonusTotal">+0%</b></span>
+          <span class="ach-count" id="achCount">0/12</span>
+        </div>
       </div>
       <div class="ach-grid" id="achGrid"></div>
     </section>
@@ -373,8 +402,13 @@
 
     // —— 成就相关状态 ——
     var lifetime = 0;    // 历史累计“获得”的金币（消费不减，供累计类成就判定）
-    var unlocked = [false, false, false, false, false, false];  // 各成就是否已解锁（持久化）
-    var announced = [false, false, false, false, false, false]; // 本次会话是否已弹过解锁提示
+    var prestiges = 0;   // 已完成的转生次数（F-13 成就 9 依赖；当前无转生系统，恒为 0）
+    var ACH_COUNT = 12;  // 成就总数（基础 6 + 进阶 6）
+    var unlocked = [];   // 各成就是否已解锁（持久化）
+    var announced = [];  // 本次会话是否已弹过解锁提示
+    for (var _ai = 0; _ai < ACH_COUNT; _ai++) { unlocked.push(false); announced.push(false); }
+    var speedrunHit = false;                 // 「极速挑战」是否曾在时限内达标（持久化）
+    var sessionStartTs = Date.now();         // 本会话开始时刻（用于极速挑战计时）
 
     var countEl = document.getElementById("count");
     var incomeTotalEl = document.getElementById("incomeTotal");
@@ -383,6 +417,7 @@
     var tierEl = document.getElementById("tierBadge");
     var achCountEl = document.getElementById("achCount");
     var achGridEl = document.getElementById("achGrid");
+    var bonusTotalEl = document.getElementById("bonusTotal"); // 顶部总加成展示
     var achCards = []; // 依次保存成就卡节点，便于刷新状态
 
     // ---- 金币数字“滚动过渡” ----
@@ -440,7 +475,9 @@
           owned: owned,
           ts: Date.now(),
           lifetime: lifetime,
-          unlocked: unlocked
+          unlocked: unlocked,
+          prestiges: prestiges,
+          speedrunHit: speedrunHit
         }));
       } catch (e) { /* 隐私模式等写失败时静默忽略 */ }
     }
@@ -470,11 +507,16 @@
       // 2) 恢复“累计金币”与已解锁成就（兼容旧存档：用当前金币兜底估算累计额）
       var lv = +data.lifetime;
       lifetime = (!isNaN(lv) && lv > 0) ? lv : coins;
+      // 旧存档只有 6 位 unlocked：按当前 ACH_COUNT 逐个映射，缺位补 false（不误判）
       if (Array.isArray(data.unlocked)) {
         for (var ui = 0; ui < unlocked.length; ui++) {
           unlocked[ui] = !!data.unlocked[ui];
         }
       }
+      // 转生次数与极速挑战记录（旧存档无此字段时保持默认）
+      var pv = +data.prestiges;
+      prestiges = (!isNaN(pv) && pv > 0) ? Math.floor(pv) : 0;
+      speedrunHit = !!data.speedrunHit;
 
       // 3) 离线收益：距上次保存的秒数 × 每秒总收入，且封顶 12 小时（F-11）
       var nowTs = Date.now();
@@ -499,6 +541,9 @@
     function resetGame() {
       coins = 0;
       lifetime = 0;
+      prestiges = 0;
+      speedrunHit = false;
+      sessionStartTs = Date.now();
       for (var i = 0; i < owned.length; i++) owned[i] = 0;
       for (var ai = 0; ai < unlocked.length; ai++) { unlocked[ai] = false; announced[ai] = false; }
       render();
@@ -536,39 +581,90 @@
     // 每种当前每秒产量（本卡片类型全部产量 = 数量 * 单件率）
     function prodOf(i) { return owned[i] * PRODUCERS[i].rate; }
 
-    // 每秒总收入
-    function totalIncome() {
+    // 基础每秒产量（不含成就加成）——供成就判定使用，避免加成放大导致的自我强化
+    function baseIncome() {
       var s = 0;
       for (var i = 0; i < PRODUCERS.length; i++) s += prodOf(i);
       return s;
     }
 
-    // —— 称号（随每秒收入变化） ——
-    function titleFor(rate) {
-      if (rate < 10)  return '🏠 小作坊';
-      if (rate < 100) return '🏭 小型工厂';
-      if (rate < 1000) return '🏢 大型企业';
-      return '👑 金币帝国';   // rate >= 1000
+    // 每秒总收入 = 基础产量 × (1 + 成就永久加成%)
+    function totalIncome() {
+      return baseIncome() * (1 + achievementBonusPercent() / 100);
     }
 
-    // —— 成就元数据与判定 ——
+    // —— 称号（F-12：随每秒收入变化，共五档） ——
+    function titleFor(rate) {
+      if (rate < 10)    return '🏠 小作坊';
+      if (rate < 100)   return '🏭 小型工厂';
+      if (rate < 1000)  return '🏢 大型企业';
+      if (rate < 10000) return '🏰 商业帝国';
+      return '👑 金币帝国';   // rate >= 10000
+    }
+
+    // —— 成就元数据与判定（F-13：12 个 = 基础 6 + 进阶 6） ——
+    // bonus：解锁后永久提供的全局产量加成（%，参照 Clickstellar 的叠加式设计）
     var ACH_LIST = [
-      { ic: '🥉', name: '第一桶金',   desc: '累计获得金币达 100' },
-      { ic: '🥈', name: '小有积蓄',   desc: '累计获得金币达 10,000' },
-      { ic: '🥇', name: '百万富翁',   desc: '累计获得金币达 1,000,000' },
-      { ic: '⛏️', name: '矿工队长',   desc: '拥有 50 个矿工' },
-      { ic: '💰', name: '印钞机',     desc: '每秒收入达 1,000' },
-      { ic: '🎯', name: '全能投资家', desc: '4 种升级各至少拥有 1 个' }
+      // —— 基础成就 ——
+      { ic: '🥉', name: '第一桶金',     desc: '历史累计金币 ≥ 100',        bonus: 2,  cat: '基础' },
+      { ic: '🥈', name: '小有积蓄',     desc: '历史累计金币 ≥ 10,000',     bonus: 3,  cat: '基础' },
+      { ic: '🥇', name: '百万富翁',     desc: '历史累计金币 ≥ 1,000,000',  bonus: 5,  cat: '基础' },
+      { ic: '⛏️', name: '矿工队长',     desc: '矿工拥有数量 ≥ 50',         bonus: 4,  cat: '基础' },
+      { ic: '💰', name: '印钞机',       desc: '每秒收入 ≥ 1,000',          bonus: 5,  cat: '基础' },
+      { ic: '🎯', name: '全能投资家',   desc: '4 种升级各至少拥有 1 个',    bonus: 5,  cat: '基础' },
+      // —— 进阶成就 ——
+      { ic: '⚡', name: '速度狂人',     desc: '每秒收入 ≥ 10,000',         bonus: 8,  cat: '进阶' },
+      { ic: '🏗️', name: '建筑大师',     desc: '单种升级拥有数量 ≥ 100',     bonus: 8,  cat: '进阶' },
+      { ic: '🔄', name: '轮回者',       desc: '完成至少 1 次转生',          bonus: 10, cat: '进阶' },
+      { ic: '📚', name: '图鉴收集者',   desc: '解锁 12 种成就中的 8 种',    bonus: 10, cat: '进阶' },
+      { ic: '🚀', name: '极速挑战',     desc: '10 分钟内每秒收入达 1,000',  bonus: 12, cat: '进阶' },
+      { ic: '🌟', name: '完美主义者',   desc: '单次轮回中 4 种升级均达 50 个', bonus: 15, cat: '进阶' }
     ];
+
+    // 会话计时：用于「极速挑战」（10 分钟内达成每秒收入 1,000）
+    var SPEEDRUN_WINDOW_MS = 10 * 60 * 1000;   // 10 分钟
+    // （speedrunHit / sessionStartTs 已在状态区声明）
+
+    // 全部升级种类中某一类的最大拥有数量（供「建筑大师」判定）
+    function maxOwned() {
+      var m = 0;
+      for (var i = 0; i < owned.length; i++) if (owned[i] > m) m = owned[i];
+      return m;
+    }
+
+    // 已解锁成就数量
+    function unlockedCount() {
+      var n = 0;
+      for (var i = 0; i < unlocked.length; i++) if (unlocked[i]) n++;
+      return n;
+    }
+
     // i 号成就当前是否达成（仅做条件判断，不改状态）
     function isAchieved(i) {
-      if (i === 0) return lifetime >= 100;
-      if (i === 1) return lifetime >= 10000;
-      if (i === 2) return lifetime >= 1000000;
-      if (i === 3) return owned[0] >= 50;                     // 矿工数量
-      if (i === 4) return totalIncome() >= 1000;              // 每秒收入
-      if (i === 5) return owned[0] >= 1 && owned[1] >= 1 && owned[2] >= 1 && owned[3] >= 1;
-      return false;
+      switch (i) {
+        // 基础
+        case 0: return lifetime >= 100;
+        case 1: return lifetime >= 10000;
+        case 2: return lifetime >= 1000000;
+        case 3: return owned[0] >= 50;                              // 矿工数量
+        case 4: return baseIncome() >= 1000;                        // 每秒收入（基础值，不受加成放大）
+        case 5: return owned[0] >= 1 && owned[1] >= 1 && owned[2] >= 1 && owned[3] >= 1;
+        // 进阶
+        case 6: return baseIncome() >= 10000;                       // 速度狂人
+        case 7: return maxOwned() >= 100;                           // 建筑大师
+        case 8: return prestiges >= 1;                              // 轮回者（待转生系统）
+        case 9: return unlockedCount() >= 8;                        // 图鉴收集者
+        case 10: return speedrunHit || (Date.now() - sessionStartTs <= SPEEDRUN_WINDOW_MS && baseIncome() >= 1000);
+        case 11: return owned[0] >= 50 && owned[1] >= 50 && owned[2] >= 50 && owned[3] >= 50; // 完美主义者
+        default: return false;
+      }
+    }
+
+    // 当前总加成（%）：所有已解锁成就的 bonus 之和
+    function achievementBonusPercent() {
+      var sum = 0;
+      for (var i = 0; i < ACH_LIST.length; i++) if (unlocked[i]) sum += ACH_LIST[i].bonus;
+      return sum;
     }
 
     // 构建成就卡 DOM（一次），各卡结构固定，后续只切 .done 状态
@@ -581,7 +677,8 @@
           el.innerHTML =
             '<span class="a-ic">' + a.ic + '</span>' +
             '<span class="a-name">' + a.name + '</span>' +
-            '<span class="a-desc">' + a.desc + '</span>';
+            '<span class="a-desc">' + a.desc + '</span>' +
+            '<span class="a-bonus">+' + a.bonus + '% 全局产量</span>';
           achGridEl.appendChild(el);
           achCards[idx] = el;
         })(i);
@@ -592,6 +689,11 @@
     function updateAchievements() {
       var newly = [];
 
+      // 记录「极速挑战」是否在时限窗口内达标（达标后永久保留，避免窗口过期后丢失）
+      if (!speedrunHit && (Date.now() - sessionStartTs) <= SPEEDRUN_WINDOW_MS && baseIncome() >= 1000) {
+        speedrunHit = true;
+      }
+
       // 集齐本次应解锁的成就（仅在状态翻转时收集一次，避免重复弹窗）
       for (var i = 0; i < ACH_LIST.length; i++) {
         if (!unlocked[i] && isAchieved(i)) {
@@ -601,12 +703,11 @@
         }
       }
 
-      // 刷新卡片样式与计数器
+      // 刷新卡片样式与计数器（重复解锁不重复弹窗；计数始终按实际状态统计）
       var doneCount = 0;
       for (var j = 0; j < achCards.length; j++) {
         if (unlocked[j]) {
-          achCards[j].classList.remove("ach-item");
-          achCards[j].classList.add("ach-item", "done");
+          achCards[j].classList.add("done");
           doneCount++;
         } else {
           achCards[j].classList.remove("done");
@@ -614,10 +715,15 @@
       }
       achCountEl.textContent = doneCount + '/' + ACH_LIST.length;
 
+      // 更新顶部“总加成”展示
+      if (bonusTotalEl) bonusTotalEl.textContent = '+' + achievementBonusPercent() + '%';
+
       // 弹出刚解锁的成就（一条提示囊括本次全部新增，避免弹窗刷屏）
       if (newly.length > 0) {
         var lines = ['🎉 解锁新成就！'];
-        for (var k = 0; k < newly.length; k++) lines.push('🏆 ' + newly[k].ic + ' ' + newly[k].name);
+        for (var k = 0; k < newly.length; k++) {
+          lines.push('🏆 ' + newly[k].ic + ' ' + newly[k].name + '（+' + newly[k].bonus + '% 全局产量）');
+        }
         window.alert(lines.join('\n'));
         saveGame();   // 解锁立即可落盘
       }
@@ -677,6 +783,10 @@
     // 同步全部界面：金币、总收入、每张卡片数量/产量/价格/可用（绿色）或不可用（灰色）
     function render() {
       setCoinText(coins);
+
+      // 先结算成就（可能改变永久加成），再据此计算收入/称号，避免显示滞后一帧
+      updateAchievements();
+
       incomeTotalEl.textContent = pretty(totalIncome());
 
       var cards = upgradesEl.querySelectorAll(".up-card");
@@ -696,7 +806,6 @@
       }
 
       tierEl.textContent = titleFor(totalIncome());      // 按收入更新称号
-      updateAchievements();                              // 判定并刷新成就视图
     }
 
     function handleClick(e) {
