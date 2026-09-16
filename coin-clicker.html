@@ -389,19 +389,21 @@
     // 显示值缓慢逼近目标值，避免每次变化瞬间大跳
     var shownCoins = 0;      // 当前展示给用户的数值（内部完整整数）
     var tweenId = null;      // 当前动画帧句柄
+    var COIN_TWEEN_MS = 360; // 0.36s 内到达目标值（F-02）
+    var COIN_HEAD_MS = 90;   // 首帧立即推进的时间量：保证数值变化即时可见
     function setCoinText(target) {
       var from = shownCoins;
       var to = target;
-      var start = null;
-      if (tweenId) { cancelAnimationFrame(tweenId); }
+      if (tweenId) { cancelAnimationFrame(tweenId); tweenId = null; }
       if (Math.abs(to - from) < 0.6) {          // 变化过小：直接落地
         shownCoins = to;
         countEl.textContent = pretty(Math.round(shownCoins));
         return;
       }
+      // 虚拟起点：把首帧视作动画已进行 COIN_HEAD_MS，避免首个 rAF 未触发时文本滞留旧值
+      var virtualStart = (window.performance && performance.now ? performance.now() : Date.now()) - COIN_HEAD_MS;
       function step(ts) {
-        if (start === null) start = ts;
-        var p = Math.min(1, (ts - start) / 360);   // 0.36s 内到达
+        var p = Math.min(1, (ts - virtualStart) / COIN_TWEEN_MS); // 0.36s 内到达
         var eased = 1 - Math.pow(1 - p, 3);        // easeOutCubic
         shownCoins = from + (to - from) * eased;
         countEl.textContent = pretty(Math.round(shownCoins));
@@ -412,7 +414,7 @@
           tweenId = null;
         }
       }
-      tweenId = requestAnimationFrame(step);
+      step(virtualStart + COIN_HEAD_MS);  // 同步推进首帧，并在内部注册后续动画帧
     }
 
     // ---- 存档 / 离线收益 / 重置 ----
