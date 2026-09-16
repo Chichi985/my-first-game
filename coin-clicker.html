@@ -498,16 +498,20 @@
       lifetime += n;
     }
 
-    // 数字格式化：>1,000,000 用 M，>1,000 用 K，否则原样整数
+    // 数字格式化（F-03）：
+    //   < 1,000              → 原样整数（如 999）
+    //   ≥ 1,000              → K，一位小数（如 1.5K；恰好整千显示 1K）
+    //   ≥ 1,000,000          → M（如 2M）
+    //   ≥ 1,000,000,000      → B（如 3.2B）
+    //   ≥ 1,000,000,000,000  → T（如 1.5T）
+    var UNITS = [[1e12, 'T'], [1e9, 'B'], [1e6, 'M'], [1e3, 'K']];
     function pretty(n) {
       if (isNaN(n)) return "0";
-      if (n >= 1000000) {
-        var m = n / 1000000;
-        return (m % 1 === 0 ? m : m.toFixed(1)) + 'M';
-      }
-      if (n >= 1000) {
-        var k = n / 1000;
-        return (k % 1 === 0 ? k : k.toFixed(1)) + 'K';
+      for (var i = 0; i < UNITS.length; i++) {
+        if (n >= UNITS[i][0]) {
+          var x = n / UNITS[i][0];
+          return (x % 1 === 0 ? x : x.toFixed(1)) + UNITS[i][1];
+        }
       }
       return Math.floor(n).toString();
     }
