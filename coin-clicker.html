@@ -421,6 +421,17 @@
     var KEY = 'coinClickerSave_v1';
     var pendingWelcome = null; // 待画面刷新后再弹出的欢迎提示
 
+    // 离线收益上限（F-11）：基础 12 小时；未来转生系统可通过提升倍数来延长上限。
+    // 目前无转生系统，倍数固定为 1；接入转生时只需让它返回实际的加成倍数。
+    var OFFLINE_BASE_CAP_SECONDS = 12 * 60 * 60;   // 12 小时
+    function offlineCapSeconds() {
+      return OFFLINE_BASE_CAP_SECONDS * prestigeCapMultiplier();
+    }
+    // 转生加成倍数（预留接口）：当前返回 1，即上限为 12 小时
+    function prestigeCapMultiplier() {
+      return 1;
+    }
+
     // 把当前进度写入 localStorage（含最后保存时间戳）
     function saveGame() {
       try {
@@ -465,15 +476,16 @@
         }
       }
 
-      // 3) 离线收益：距上次保存的秒数 × 每秒总收入
+      // 3) 离线收益：距上次保存的秒数 × 每秒总收入，且封顶 12 小时（F-11）
       var nowTs = Date.now();
       var lastTs = +data.ts || nowTs;
       var offlineSec = Math.floor((nowTs - lastTs) / 1000);
       var rate = totalIncome();
-      if (offlineSec > 10 && rate > 0) {           // 仅超过 10 秒才触发
-        var gained = rate * offlineSec;
+      if (offlineSec > 10 && rate > 0) {           // 仅超过 10 秒才触发；≤10 秒不结算也不弹窗
+        var cappedSec = Math.min(offlineSec, offlineCapSeconds()); // 超出上限的部分不计入
+        var gained = rate * cappedSec;
         addCoins(gained);                          // 计入余额与累计
-        pendingWelcome = { sec: offlineSec, gained: gained }; // 待 render 后弹出
+        pendingWelcome = { sec: cappedSec, gained: gained }; // 待 render 后弹出
       }
     }
 
